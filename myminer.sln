@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "myminer", "Assembly-CSharp.csproj", "{4DFDA94A-094E-BDF3-104D-570399EF1AC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "myminer", "Assembly-CSharp-firstpass.csproj", "{6870C6F0-3445-CEDF-FE36-F8215489F7FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "myminer", "Assembly-CSharp-Editor.csproj", "{57B716AE-C6F1-1E81-BB99-3E69F92521B8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4DFDA94A-094E-BDF3-104D-570399EF1AC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DFDA94A-094E-BDF3-104D-570399EF1AC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DFDA94A-094E-BDF3-104D-570399EF1AC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DFDA94A-094E-BDF3-104D-570399EF1AC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6870C6F0-3445-CEDF-FE36-F8215489F7FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6870C6F0-3445-CEDF-FE36-F8215489F7FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6870C6F0-3445-CEDF-FE36-F8215489F7FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6870C6F0-3445-CEDF-FE36-F8215489F7FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57B716AE-C6F1-1E81-BB99-3E69F92521B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57B716AE-C6F1-1E81-BB99-3E69F92521B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57B716AE-C6F1-1E81-BB99-3E69F92521B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57B716AE-C6F1-1E81-BB99-3E69F92521B8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
