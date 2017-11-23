@@ -19,14 +19,14 @@ public class TheCube : MonoBehaviour
     private bool tweaked = false;
 
     private Data data = new Data();
-    private double[][] cubedata;
+    private string cubedata;
     // Use this for initialization
     void Start()
     {
         startPOS = cubelete.transform.localPosition;
 
         cubedata = data.MakeFromDefaultData(31, 41);
-
+		Debug.Log (cubedata);
         // generate the touchable surface
         for (int i = 0; i < xMax; i++)
         {
