@@ -5,13 +5,13 @@ public class CameraHandler : MonoBehaviour
 {
 
     private static readonly float ZoomSpeedTouch = 0.1f;
-    private static readonly float ZoomSpeedMouse = 0.5f;
+    //private static readonly float ZoomSpeedMouse = 0.5f;
 
     private bool wasZoomingLastFrame;     // Touch mode only
     // Vector2[] lastZoomPositions;     // Touch mode only
 
-    private bool mouseInitiatied = false;
-    private float initMousePositionY;
+    //private bool mouseInitiatied = false;
+    //private float initMousePositionY;
 
     public GameObject theCube;
 
@@ -20,14 +20,6 @@ public class CameraHandler : MonoBehaviour
         if (Input.touchSupported && Application.platform != RuntimePlatform.WebGLPlayer)
         {
             HandleTouch();
-        }
-        else if (Input.GetMouseButton(0))
-        {
-            HandleMouse();
-        }
-        else
-        {
-            mouseInitiatied = false;
         }
     }
 
@@ -61,23 +53,34 @@ public class CameraHandler : MonoBehaviour
         }
     }
 
-    void HandleMouse()
-    {
-        if (mouseInitiatied == false)
-        {
-            mouseInitiatied = true;
-            initMousePositionY = Input.mousePosition.y;
-        }
 
-        ZoomCube(ZoomSpeedMouse);
-    }
 
     void ZoomCube(float speed)
     {
         float currMousePositionY = Input.mousePosition.y;
         Vector3 cubePosition = theCube.transform.position;
-        float diff = (initMousePositionY - currMousePositionY) * 0.001f;
+        float diff = (currMousePositionY) * 0.001f;
         float newZ = cubePosition.z + (diff * speed);
+        if (newZ < 0.25f)
+        {
+            newZ = 0.25f;
+        }
+        theCube.transform.position = new Vector3(cubePosition.x, cubePosition.y, newZ);
+    }
+
+    public void ZoomButton(float direction)
+    {
+        Vector3 cubePosition = theCube.transform.position;
+
+        float newZ = cubePosition.z + (direction * 0.01f);
+        if (newZ < 0.15f)
+        {
+            newZ = 0.15f;
+        }
+        if (newZ > 15.0f)
+        {
+            newZ = 15.0f;
+        }
         theCube.transform.position = new Vector3(cubePosition.x, cubePosition.y, newZ);
     }
 }

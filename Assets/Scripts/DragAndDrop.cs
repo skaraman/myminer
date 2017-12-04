@@ -8,6 +8,7 @@ public class DragAndDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     Vector3 _offsetToMouse;
     float _zDistanceToCamera;
     Vector3 temp;
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         DraggedInstance = gameObject;
