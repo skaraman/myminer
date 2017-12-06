@@ -1,17 +1,17 @@
-﻿<Properties StartupConfiguration="{ECF4CAC5-D1CC-B0DA-AD40-E9364091905C}|">
+﻿<Properties StartupConfiguration="{4DFDA94A-094E-BDF3-104D-570399EF1AC9}|Unit Tests" StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/TheCube.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Data/cube.json">
     <Files>
       <File FileName="Assets/Scripts/Data/cube.json" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Data.cs" Line="88" Column="25" />
-      <File FileName="Assets/Scripts/TheCube.cs" Line="106" Column="18" />
+      <File FileName="Assets/Scripts/TheCube.cs" Line="40" Column="3" />
       <File FileName="Assets/Scripts/DragAndDrop.cs" Line="6" Column="46" />
-      <File FileName="Assets/Scripts/CameraHandler.cs" Line="4" Column="24" />
-      <File FileName="Assets/Scripts/ButtonProcessor.cs" Line="19" Column="5" />
-      <File FileName="Assets/Scripts/TurnAroundScript.cs" Line="7" Column="34" />
+      <File FileName="Assets/Scripts/CameraHandler.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/ButtonProcessor.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Cubelete.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/semyonkaraman/Desktop/dev/UNITY/myminer/Assets/Scripts/TheCube.cs" line="28" column="1" />
@@ -20,4 +20,5 @@
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.myminer PreferredExecutionTarget="Unity.Editor" />
   <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp-firstpass PreferredExecutionTarget="MonoDevelop.Default" />
 </Properties>
