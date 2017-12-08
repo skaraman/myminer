@@ -24,6 +24,7 @@
 /Users/sem/Desktop/dev/gm/unity/myminer/Temp/bin/Debug/Unity.Cecil.Pdb.dll
 /Users/sem/Desktop/dev/gm/unity/myminer/Temp/bin/Debug/Unity.Cecil.Mdb.dll
 /Users/sem/Desktop/dev/gm/unity/myminer/Temp/bin/Debug/Assembly-CSharp-firstpass.pdb
+/Users/sem/Desktop/dev/gm/unity/myminer/Temp/bin/Debug/Assembly-CSharp-firstpass.dll.mdb
 /Users/sem/Desktop/dev/gm/unity/myminer/Temp/bin/Debug/UnityEngine.dll.mdb
 /Users/sem/Desktop/dev/gm/unity/myminer/Temp/bin/Debug/UnityEngine.xml
 /Users/sem/Desktop/dev/gm/unity/myminer/Temp/bin/Debug/UnityEditor.dll.mdb

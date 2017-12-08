@@ -1,24 +1,25 @@
-﻿<Properties StartupConfiguration="{4DFDA94A-094E-BDF3-104D-570399EF1AC9}|Unit Tests" StartupItem="Assembly-CSharp.csproj">
+﻿<Properties StartupConfiguration="{4DFDA94A-094E-BDF3-104D-570399EF1AC9}|Unit Tests">
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Data/cube.json">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/DragAndDrop.cs">
     <Files>
       <File FileName="Assets/Scripts/Data/cube.json" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Data.cs" Line="88" Column="25" />
-      <File FileName="Assets/Scripts/TheCube.cs" Line="40" Column="3" />
-      <File FileName="Assets/Scripts/DragAndDrop.cs" Line="6" Column="46" />
+      <File FileName="Assets/Scripts/TheCube.cs" Line="123" Column="9" />
+      <File FileName="Assets/Scripts/DragAndDrop.cs" Line="40" Column="39" />
       <File FileName="Assets/Scripts/CameraHandler.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/ButtonProcessor.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Cubelete.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/semyonkaraman/Desktop/dev/UNITY/myminer/Assets/Scripts/TheCube.cs" line="28" column="1" />
+      <Breakpoint file="/Users/sem/Desktop/dev/gm/unity/myminer/Assets/Scripts/DragAndDrop.cs" relfile="Assets/Scripts/DragAndDrop.cs" line="32" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp-firstpass PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.ItemProperties.myminer PreferredExecutionTarget="Unity.Editor" />
   <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp-firstpass PreferredExecutionTarget="MonoDevelop.Default" />
 </Properties>

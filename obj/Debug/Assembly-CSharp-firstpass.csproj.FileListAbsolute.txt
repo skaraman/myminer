@@ -49,7 +49,6 @@
 /Users/sem/Desktop/dev/gm/unity/myminer/Temp/bin/Debug/UnityEngine.Analytics.dll.mdb
 /Users/sem/Desktop/dev/gm/unity/myminer/Temp/bin/Debug/UnityEngine.Purchasing.dll.mdb
 /Users/sem/Desktop/dev/gm/unity/myminer/Temp/bin/Debug/Unity.UNetWeaver.dll.mdb
-/Users/sem/Desktop/dev/gm/unity/myminer/obj/Debug/Assembly-CSharp-firstpass.csprojResolveAssemblyReference.cache
 /Users/sem/Desktop/dev/gm/unity/myminer/obj/Debug/Assembly-CSharp-firstpass.csproj.CoreCompileInputs.cache
 /Users/sem/Desktop/dev/gm/unity/myminer/obj/Debug/Assembly-CSharp-firstpass.dll
 /Users/sem/Desktop/dev/gm/unity/myminer/obj/Debug/Assembly-CSharp-firstpass.pdb
