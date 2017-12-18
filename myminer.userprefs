@@ -1,11 +1,11 @@
-﻿<Properties StartupConfiguration="{4DFDA94A-094E-BDF3-104D-570399EF1AC9}|Unit Tests">
+﻿<Properties StartupConfiguration="{ECF4CAC5-D1CC-B0DA-AD40-E9364091905C}|">
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/DragAndDrop.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/TheCube.cs">
     <Files>
       <File FileName="Assets/Scripts/Data/cube.json" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Data.cs" Line="88" Column="25" />
-      <File FileName="Assets/Scripts/TheCube.cs" Line="123" Column="9" />
-      <File FileName="Assets/Scripts/DragAndDrop.cs" Line="40" Column="39" />
+      <File FileName="Assets/Scripts/Data.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/TheCube.cs" Line="167" Column="1" />
+      <File FileName="Assets/Scripts/DragAndDrop.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CameraHandler.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/ButtonProcessor.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Cubelete.cs" Line="1" Column="1" />
@@ -15,7 +15,7 @@
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/semyonkaraman/Desktop/dev/UNITY/myminer/Assets/Scripts/TheCube.cs" line="28" column="1" />
-      <Breakpoint file="/Users/sem/Desktop/dev/gm/unity/myminer/Assets/Scripts/DragAndDrop.cs" relfile="Assets/Scripts/DragAndDrop.cs" line="32" column="1" />
+      <Breakpoint file="/Users/sem/Desktop/dev/gm/unity/myminer/Assets/Scripts/TheCube.cs" relfile="Assets/Scripts/TheCube.cs" line="167" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

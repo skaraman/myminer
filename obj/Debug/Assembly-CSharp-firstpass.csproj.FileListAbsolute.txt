@@ -52,3 +52,4 @@
 /Users/sem/Desktop/dev/gm/unity/myminer/obj/Debug/Assembly-CSharp-firstpass.csproj.CoreCompileInputs.cache
 /Users/sem/Desktop/dev/gm/unity/myminer/obj/Debug/Assembly-CSharp-firstpass.dll
 /Users/sem/Desktop/dev/gm/unity/myminer/obj/Debug/Assembly-CSharp-firstpass.pdb
+/Users/sem/Desktop/dev/gm/unity/myminer/obj/Debug/Assembly-CSharp-firstpass.csprojResolveAssemblyReference.cache
