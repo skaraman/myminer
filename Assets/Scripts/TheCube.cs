@@ -158,43 +158,53 @@ public class TheCube : MonoBehaviour
 
     public void UpdateInteractibleSurface(float xCubes, float yCubes)
     {
+
+        Debug.Log(string.Format("X: {0}, Y: {1}", xCubes, yCubes));
         var yCubesAbs = (int)Mathf.Abs(yCubes);
         var xCubesAbs = (int)Mathf.Abs(xCubes);
 
         Right = xCubesAbs > 0 ? (int)(Right - xCubes) : Right;
         Left = xCubesAbs > 0 ? (int)(Left - xCubes) : Left;
-
         Top = yCubesAbs > 0 ? (int)(Top - yCubes) : Top;
         Bottom = yCubesAbs > 0 ? (int)(Bottom - yCubes) : Bottom;
 
-        //delete Y
-        for (int x = 0; x < (int)xMax; x++)
+        bool direction = true;
+        var xOffset = 0;
+        var yOffset = yCubesAbs;
+        if (yCubes > 0 || xCubes > 0)
         {
-            for (int y = yCubesAbs - 1; y >= 0; y--)
+            direction = false;
+            yOffset = 0;
+            xOffset = surfaceCubeletes.Count - 1;
+        }
+
+        var xDeleteEnd = (int)xMax - 1;
+        var yDeleteStart = yCubesAbs - 1;
+
+        if (xCubesAbs > 0)
+        {
+            xDeleteEnd = xCubesAbs - 1;
+            yDeleteStart = (int)yMax - 1;
+        }
+        //delete
+        for (int x = 0; x <= xDeleteEnd; x++)
+        {
+            for (int y = yDeleteStart; y >= 0; y--)
             {
-                if (yCubes < 0)
+                if (direction)
                 {
                     Destroy(surfaceCubeletes[x][y].gameObject);
                     surfaceCubeletes[x].RemoveAt(y);
                 }
                 else
                 {
-                    Destroy(surfaceCubeletes[x][surfaceCubeletes[x].Count - 1].gameObject);
-                    surfaceCubeletes[x].RemoveAt(surfaceCubeletes[x].Count - 1);
+                    Destroy(surfaceCubeletes[xOffset - x][surfaceCubeletes[xOffset - x].Count - 1].gameObject);
+                    surfaceCubeletes[xOffset - x].RemoveAt(surfaceCubeletes[xOffset - x].Count - 1);
                 }
             }
         }
 
-        //add Y
-        var yOffset = 0;
-        if (yCubes > 0)
-        {
-            yOffset = 0;
-        }
-        else
-        {
-            yOffset = yCubesAbs;
-        }
+        //add
         for (int xP = Left; xP < Right; xP++)
         {
             for (int yP = 0; yP < yCubesAbs; yP++)
@@ -219,60 +229,6 @@ public class TheCube : MonoBehaviour
                 }
             }
         }
-
-        //delete X
-        for (int x = 0; x < xCubesAbs; x++)
-        {
-            for (int y = (int)yMax - 1; y >= 0; y--)
-            {
-                if (xCubes < 0)
-                {
-                    Destroy(surfaceCubeletes[x][y].gameObject);
-                    surfaceCubeletes[x].RemoveAt(y);
-                }
-                else
-                {
-                    Destroy(surfaceCubeletes[x][surfaceCubeletes[x].Count - 1].gameObject);
-                    surfaceCubeletes[x].RemoveAt(surfaceCubeletes[x].Count - 1);
-                }
-            }
-        }
-
-        //add X & delete previous Y? 
-        var xOffset = 0;
-        if (xCubes > 0)
-        {
-            xOffset = 0;
-        }
-        else
-        {
-            xOffset = xCubesAbs;
-        }
-        for (int xP = 0; xP < xCubesAbs; xP++)
-        {
-            for (int yP = Bottom; yP < Top; yP++)
-            {
-                CubeleteObject newCubelete = new CubeleteObject();
-                newCubelete.gameObject = Instantiate(cubelete, surface.transform);
-                newCubelete.gameObject.transform.localPosition = new Vector3(
-                    cubeleteBasePosition.x + (spawnMinDist * ((xCubes > 0 ? Left : Right) - (xOffset - xP))),
-                    cubeleteBasePosition.y + (spawnMinDist * yP) - 0.38f,
-                    cubeleteBasePosition.z
-                );
-
-                // newCubelete.cubeX 
-                // newCubelete.cubeY
-                if (yCubes > 0)
-                {
-                    surfaceCubeletes[xP - Left].Insert(yP, newCubelete);
-                }
-                else
-                {
-                    surfaceCubeletes[xP - Left].Add(newCubelete);
-                }
-            }
-        }
-
     }
 
     //public void SaveData ()
