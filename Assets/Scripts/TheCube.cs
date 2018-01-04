@@ -3,8 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Microsoft.CSharp;
 
-public class TheCube : MonoBehaviour
-{
+public class TheCube : MonoBehaviour {
     public GameObject cubelete;
     public GameObject surface;
     public GameObject fakeSurface;
@@ -35,22 +34,19 @@ public class TheCube : MonoBehaviour
     //private Data data = new Data ();
     //private string cubedata;
 
-    void Start()
-    {
+    void Start () {
         cubeleteBasePosition = cubelete.transform.localPosition;
         cubeTrackPosition = transform.localPosition;
+        MakeInteractibleSurface();
     }
 
-    void Update()
-    {
+    void Update () {
         Vector3 currPos = transform.localPosition;
 
-        if (currPos.z > 0.51 && faded == false)
-        {
+        if (currPos.z > 0.51 && faded == false) {
             FadeCube(true);
         }
-        else if (currPos.z <= 0.51 && faded == true)
-        {
+        else if (currPos.z <= 0.51 && faded == true) {
             FadeCube(false);
         }
 
@@ -61,8 +57,7 @@ public class TheCube : MonoBehaviour
         xCubes = xTracker / 0.02f;
         yCubes = yTracker / 0.02f;
 
-        if (Mathf.Abs(xCubes) > 1 || Mathf.Abs(yCubes) > 1)
-        {
+        if (Mathf.Abs(xCubes) > 1 || Mathf.Abs(yCubes) > 1) {
             var xTakeaway = Mathf.Round(xCubes);
             var yTakeaway = Mathf.Round(yCubes);
             xTracker -= xTakeaway * 0.02f;
@@ -77,15 +72,15 @@ public class TheCube : MonoBehaviour
         //		}
     }
 
-    void FadeCube(bool fade)
-    {
+    void FadeCube (bool fade) {
         faded = fade;
         fakeSurface.SetActive(fade);
         surface.SetActive(!fade);
     }
 
-    void TweakSurface(bool tweak)
-    {
+    void TweakSurface (bool tweak) {
+        // tweaking surface has an inherent problem - moving position of cubeletes changes where they are positioned >< 
+        // maybe what i need to do is change spawnMinDist, or better yet, scale down the cubelete so it looks like there is space added betwixt
         //		tweaked = tweak;
         //		var children = surface.GetComponentsInChildren<Transform> ();x
         //		for (var c = 1; c < children.Length; c++) {
@@ -117,8 +112,7 @@ public class TheCube : MonoBehaviour
 
     }
 
-    public void MakeInteractibleSurface()
-    {
+    public void MakeInteractibleSurface () {
 
         // every 0.02 of parent position is 1 cubelete width/height
         // so i have to create all cubeletes based on current parent position
@@ -131,13 +125,10 @@ public class TheCube : MonoBehaviour
         Left = (int)xStart;
         Right = (int)-xStart;
 
-        for (int i = 0; i < xMax; i++)
-        {
+        for (int i = 0; i < xMax; i++) {
             surfaceCubeletes.Add(new List<CubeleteObject>());
-            for (int j = 0; j < yMax; j++)
-            {
-                for (int k = 0; k < zMax; k++)
-                {
+            for (int j = 0; j < yMax; j++) {
+                for (int k = 0; k < zMax; k++) {
                     CubeleteObject newCubelete = new CubeleteObject();
                     newCubelete.gameObject = Instantiate(cubelete, surface.transform);
                     newCubelete.gameObject.transform.localPosition = new Vector3(
@@ -156,8 +147,7 @@ public class TheCube : MonoBehaviour
         }
     }
 
-    public void UpdateInteractibleSurface(float xCubes, float yCubes)
-    {
+    public void UpdateInteractibleSurface (float xCubes, float yCubes) {
 
         Debug.Log(string.Format("X: {0}, Y: {1}", xCubes, yCubes));
         var yCubesAbs = (int)Mathf.Abs(yCubes);
@@ -169,63 +159,83 @@ public class TheCube : MonoBehaviour
         Bottom = yCubesAbs > 0 ? (int)(Bottom - yCubes) : Bottom;
 
         bool direction = true;
-        var xOffset = 0;
-        var yOffset = yCubesAbs;
-        if (yCubes > 0 || xCubes > 0)
-        {
+        var xDeleteOffset = 0;
+        var yAddOffset = yCubesAbs;
+        if (yCubes > 0 || xCubes > 0) {
             direction = false;
-            yOffset = 0;
-            xOffset = surfaceCubeletes.Count - 1;
+            yAddOffset = 0;
+            xDeleteOffset = surfaceCubeletes.Count - 1;
         }
 
-        var xDeleteEnd = (int)xMax - 1;
         var yDeleteStart = yCubesAbs - 1;
+        var xDeleteEnd = (int)xMax - 1;
+        var xAddStart = Left;
+        var xAddEnd = Right;
+        var yAddStart = 0;
+        var yAddEnd = yCubesAbs;
 
-        if (xCubesAbs > 0)
-        {
-            xDeleteEnd = xCubesAbs - 1;
+        float addY = (yCubes > 0 ? (yCubes > 1 ? Bottom + (yCubes - 1) : Bottom) : (yCubes < -1 ? Top - (yCubes + 1) : Top)) - yAddOffset;
+        float addX = -1;
+
+        if (xCubesAbs > 0) {
             yDeleteStart = (int)yMax - 1;
+            xDeleteEnd = xCubesAbs - 1;
+            xAddStart = 0;
+            xAddEnd = xCubesAbs;
+            yAddStart = Bottom;
+            yAddEnd = Top;
+
+            addY = -1;
+            addX = (xCubes > 0 ? (xCubes > 1 ? Left + (xCubes - 1) : Left) : (xCubes < -1 ? Right - (xCubes + 1) : Right));
+            //direction = !direction;
         }
+
         //delete
-        for (int x = 0; x <= xDeleteEnd; x++)
-        {
-            for (int y = yDeleteStart; y >= 0; y--)
-            {
-                if (direction)
-                {
-                    Destroy(surfaceCubeletes[x][y].gameObject);
-                    surfaceCubeletes[x].RemoveAt(y);
+        for (int x = 0; x <= xDeleteEnd; x++) {
+            List<CubeleteObject> layer = surfaceCubeletes[x];
+            int insertAt = xDeleteOffset - x;
+            for (int y = yDeleteStart; y >= 0; y--) {
+                if (direction) {
+                    Destroy(layer[y].gameObject);
+                    layer.RemoveAt(y);
                 }
-                else
-                {
-                    Destroy(surfaceCubeletes[xOffset - x][surfaceCubeletes[xOffset - x].Count - 1].gameObject);
-                    surfaceCubeletes[xOffset - x].RemoveAt(surfaceCubeletes[xOffset - x].Count - 1);
+                else {
+                    insertAt = x;
+                    layer = surfaceCubeletes[xDeleteOffset - x];
+                    Destroy(layer[layer.Count - 1].gameObject);
+                    layer.RemoveAt(layer.Count - 1);
                 }
+            }
+            if (layer.Count == 0) {
+                surfaceCubeletes.Remove(layer);
+                surfaceCubeletes.Insert(insertAt, new List<CubeleteObject>());
             }
         }
 
         //add
-        for (int xP = Left; xP < Right; xP++)
-        {
-            for (int yP = 0; yP < yCubesAbs; yP++)
-            {
+        var xAddEndMinus = 0;
+        var insertAt = 0;
+        if (xCubesAbs > 0) {
+            direction = !direction;
+            xAddEndMinus = 1;
+        }
+        for (int xP = xAddStart; xP < xAddEnd; xP++) {
+            for (int yP = yAddStart; yP < yAddEnd; yP++) {
                 CubeleteObject newCubelete = new CubeleteObject();
                 newCubelete.gameObject = Instantiate(cubelete, surface.transform);
                 newCubelete.gameObject.transform.localPosition = new Vector3(
-                    cubeleteBasePosition.x + (spawnMinDist * xP),
-                    cubeleteBasePosition.y + (spawnMinDist * ((yCubes > 0 ? Bottom : Top) - (yOffset - yP))) - 0.38f,
+                    cubeleteBasePosition.x + (spawnMinDist * (addX - xP)),
+                    cubeleteBasePosition.y + (spawnMinDist * (addY - yP)) - 0.38f,
                     cubeleteBasePosition.z
                 );
-
                 // newCubelete.cubeX 
                 // newCubelete.cubeY
-                if (yCubes > 0)
-                {
-                    surfaceCubeletes[xP - Left].Insert(yP, newCubelete);
+
+                if (!direction) {
+                    surfaceCubeletes[xP - xAddStart].Insert(yAddStart, newCubelete);
                 }
-                else
-                {
-                    surfaceCubeletes[xP - Left].Add(newCubelete);
+                else {
+                    surfaceCubeletes[xAddEnd - xAddEndMinus - xP].Add(newCubelete);
                 }
             }
         }
@@ -243,15 +253,12 @@ public class TheCube : MonoBehaviour
     //}
 
 
-    static float Operator(float x, float multiplier, bool op)
-    {
+    static float Operator (float x, float multiplier, bool op) {
         float results = 0;
-        if (op == true)
-        {
+        if (op == true) {
             results = x + multiplier;
         }
-        else if (op == false)
-        {
+        else if (op == false) {
             results = x - multiplier;
         }
         return results;
@@ -259,8 +266,7 @@ public class TheCube : MonoBehaviour
 }
 
 
-public class CubeleteObject
-{
+public class CubeleteObject {
     public GameObject gameObject;
     public int cubeX;
     public int cubeY;
