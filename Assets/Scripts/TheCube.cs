@@ -186,40 +186,47 @@ public class TheCube : MonoBehaviour {
             yAddEnd = Top;
 
             addY = -1;
-            addX = (xCubes > 0 ? (xCubes > 1 ? Left + (xCubes - 1) : Left) : (xCubes < -1 ? Right - (xCubes + 1) : Right));
+            addX = (xCubes > 0 ? (xCubes > 1 ? Left + (xCubes - 1) : Left) : (xCubes < -1 ? Right - 1 : Right));
             //direction = !direction;
         }
 
         //delete
         for (int x = 0; x <= xDeleteEnd; x++) {
-            List<CubeleteObject> layer = surfaceCubeletes[x];
-            int insertAt = xDeleteOffset - x;
+            List<CubeleteObject> layer = surfaceCubeletes[yCubesAbs > 0 ? x : 0];
+            int insertAtDel = xDeleteOffset - x;
             for (int y = yDeleteStart; y >= 0; y--) {
                 if (direction) {
                     Destroy(layer[y].gameObject);
                     layer.RemoveAt(y);
                 }
                 else {
-                    insertAt = x;
-                    layer = surfaceCubeletes[xDeleteOffset - x];
+                    insertAtDel = x;
+                    layer = surfaceCubeletes[xCubesAbs > 0 ? xDeleteOffset : xDeleteOffset - x];
                     Destroy(layer[layer.Count - 1].gameObject);
                     layer.RemoveAt(layer.Count - 1);
                 }
             }
-            if (layer.Count == 0) {
+            if (layer.Count == 0 && xCubesAbs > 0) {
                 surfaceCubeletes.Remove(layer);
-                surfaceCubeletes.Insert(insertAt, new List<CubeleteObject>());
+                if (direction) {
+                    surfaceCubeletes.Add(new List<CubeleteObject>());
+                }
+                else {
+                    surfaceCubeletes.Insert(insertAtDel, new List<CubeleteObject>());
+                }
             }
         }
 
         //add
-        var xAddEndMinus = 0;
-        var insertAt = 0;
+
         if (xCubesAbs > 0) {
             direction = !direction;
-            xAddEndMinus = 1;
         }
         for (int xP = xAddStart; xP < xAddEnd; xP++) {
+            int insertAtAdd = xP - xAddStart;
+            if (xCubesAbs > 0) {
+                insertAtAdd = xP;
+            }
             for (int yP = yAddStart; yP < yAddEnd; yP++) {
                 CubeleteObject newCubelete = new CubeleteObject();
                 newCubelete.gameObject = Instantiate(cubelete, surface.transform);
@@ -232,14 +239,26 @@ public class TheCube : MonoBehaviour {
                 // newCubelete.cubeY
 
                 if (!direction) {
-                    surfaceCubeletes[xP - xAddStart].Insert(yAddStart, newCubelete);
+                    if (xCubesAbs > 0) {
+                        surfaceCubeletes[surfaceCubeletes.Count - (xAddEnd - xP)].Add(newCubelete);
+                    }
+                    if (yCubesAbs > 0) {
+                        surfaceCubeletes[xP - xAddStart].Insert(xCubesAbs > 0 ? xP : yAddStart, newCubelete);
+                    }
                 }
                 else {
-                    surfaceCubeletes[xAddEnd - xAddEndMinus - xP].Add(newCubelete);
+                    if (xCubesAbs > 0) {
+                        surfaceCubeletes[0].Add(newCubelete);
+                    }
+                    if (yCubesAbs > 0) {
+                        surfaceCubeletes[insertAtAdd].Add(newCubelete);
+                    }
+
                 }
             }
         }
     }
+
 
     //public void SaveData ()
     //{

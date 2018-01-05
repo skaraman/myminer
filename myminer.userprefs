@@ -10,18 +10,6 @@
       <File FileName="Assets/Scripts/ButtonProcessor.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Cubelete.cs" Line="7" Column="1" />
     </Files>
-    <Pads>
-      <Pad Id="MonoDevelop.Debugger.WatchPad">
-        <State>
-          <Value>Right</Value>
-          <Value>Left</Value>
-          <Value>Top</Value>
-          <Value>Bottom</Value>
-          <Value>newCubelete.gameObject.transform.localPosition.x</Value>
-          <Value>newCubelete.gameObject.transform.localPosition.y</Value>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
