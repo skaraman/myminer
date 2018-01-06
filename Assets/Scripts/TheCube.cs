@@ -223,10 +223,12 @@ public class TheCube : MonoBehaviour {
             direction = !direction;
         }
         for (int xP = xAddStart; xP < xAddEnd; xP++) {
-            int insertAtAdd = xP - xAddStart;
+            int insertAtAdd = (-xAddStart + xAddEnd) - (xP - xAddStart) - 1;
             if (xCubesAbs > 0) {
                 insertAtAdd = xP;
             }
+            var s = surfaceCubeletes[insertAtAdd];
+            var currentCount = s.Count;
             for (int yP = yAddStart; yP < yAddEnd; yP++) {
                 CubeleteObject newCubelete = new CubeleteObject();
                 newCubelete.gameObject = Instantiate(cubelete, surface.transform);
@@ -251,7 +253,7 @@ public class TheCube : MonoBehaviour {
                         surfaceCubeletes[0].Add(newCubelete);
                     }
                     if (yCubesAbs > 0) {
-                        surfaceCubeletes[insertAtAdd].Add(newCubelete);
+                        s.Insert(xCubesAbs > 0 ? 0 : currentCount, newCubelete);
                     }
 
                 }
