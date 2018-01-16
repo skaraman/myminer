@@ -27,8 +27,8 @@ public class DragAndDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             new Vector3(Input.mousePosition.x, Input.mousePosition.y, _startPosition.z)
         ) + _offsetToMouse;
         //var savedPosition = transform.position;
-        //transform.position = new Vector3(temp.x, temp.y, _startPosition.z);
-        transform.position = new Vector3(_startPosition.x, temp.y, _startPosition.z);
+        transform.position = new Vector3(temp.x, temp.y, _startPosition.z);
+        //transform.position = new Vector3(temp.x, _startPosition.y, _startPosition.z);
         //		var xCubes = Mathf.RoundToInt ((savedPosition.x - temp.x) / 0.02f);
         //		var yCubes = Mathf.RoundToInt ((savedPosition.y - temp.y) / 0.02f);
         //		if (xCubes > 0 || yCubes > 0) {
