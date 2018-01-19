@@ -9,6 +9,7 @@ public class DragAndDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     float _zDistanceToCamera;
     Vector3 temp;
     public TheCube cube;
+    public GameObject piecesSurface;
 
     public void OnBeginDrag (PointerEventData eventData) {
         DraggedInstance = gameObject;
@@ -28,6 +29,7 @@ public class DragAndDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         ) + _offsetToMouse;
         //var savedPosition = transform.position;
         transform.position = new Vector3(temp.x, temp.y, _startPosition.z);
+        //piecesSurface.transform.position = new Vector3(temp.x, temp.y, _startPosition.z);
         //transform.position = new Vector3(temp.x, _startPosition.y, _startPosition.z);
         //		var xCubes = Mathf.RoundToInt ((savedPosition.x - temp.x) / 0.02f);
         //		var yCubes = Mathf.RoundToInt ((savedPosition.y - temp.y) / 0.02f);

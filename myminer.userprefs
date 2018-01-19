@@ -2,25 +2,21 @@
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/TheCube.cs">
     <Files>
-      <File FileName="Assets/Scripts/TheCube.cs" Line="164" Column="46" />
-      <File FileName="Assets/Scripts/DragAndDrop.cs" Line="30" Column="56" />
-      <File FileName="Assets/Scripts/CameraHandler.cs" Line="70" Column="5" />
-      <File FileName="Assets/Scripts/ButtonProcessor.cs" Line="22" Column="26" />
-      <File FileName="Assets/Scripts/Cubelete.cs" Line="42" Column="6" />
+      <File FileName="Assets/Scripts/DragAndDrop.cs" Line="38" Column="14" />
+      <File FileName="Assets/Scripts/CameraHandler.cs" Line="4" Column="45" />
+      <File FileName="Assets/Scripts/ButtonProcessor.cs" Line="14" Column="20" />
+      <File FileName="Assets/Scripts/TheCube.cs" Line="160" Column="49" />
+      <File FileName="Assets/Scripts/Cubelete.cs" Line="43" Column="21" />
+      <File FileName="Assets/Scripts/Destructible.cs" Line="15" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/sem/Desktop/dev/gm/unity/myminer/Assets/Scripts/TheCube.cs" relfile="Assets/Scripts/TheCube.cs" line="173" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches>
-    <Watch file="Assets/Scripts/TheCube.cs" line="243" offsetX="795" offsetY="3383" expression="surfaceCubeletes" liveUpdate="False" />
-    <Watch file="Assets/Scripts/TheCube.cs" line="243" offsetX="831" offsetY="3433" expression="surfaceCubeletes[36]" liveUpdate="False" />
-    <Watch file="Assets/Scripts/TheCube.cs" line="243" offsetX="831" offsetY="3457" expression="surfaceCubeletes[37]" liveUpdate="False" />
-    <Watch file="Assets/Scripts/TheCube.cs" line="243" offsetX="831" offsetY="3482" expression="surfaceCubeletes[38]" liveUpdate="False" />
-    <Watch file="Assets/Scripts/TheCube.cs" line="243" offsetX="830" offsetY="3507" expression="surfaceCubeletes[39]" liveUpdate="False" />
-    <Watch file="Assets/Scripts/TheCube.cs" line="243" offsetX="795" offsetY="3409" expression="surfaceCubeletes[35]" liveUpdate="False" />
-  </MonoDevelop.Ide.DebuggingService.PinnedWatches>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp-firstpass PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.ItemProperties.myminer PreferredExecutionTarget="Unity.Editor" />
   <MultiItemStartupConfigurations />

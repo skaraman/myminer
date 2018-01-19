@@ -4,57 +4,43 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class ButtonProcessor : MonoBehaviour
-{
+public class ButtonProcessor : MonoBehaviour {
     public bool isPlusPressed = false;
     public bool isMinusPressed = false;
     public CameraHandler camHandler;
     private int pIt = 0;
     private int mIt = 0;
 
-    void Start()
-    {
-
+    void Start () {
     }
 
-    void Update()
-    {
-        if (isPlusPressed)
-        {
+    void Update () {
+        if (isPlusPressed) {
             pIt++;
             camHandler.ZoomButton(-1.0f * pIt);
         }
         else
-        if (isMinusPressed)
-        {
+        if (isMinusPressed) {
             mIt++;
             camHandler.ZoomButton(1.0f * mIt);
         }
     }
 
-    public void onPointerDownButton(string buttonType)
-    {
-        if (buttonType == "plus")
-        {
+    public void onPointerDownButton (string buttonType) {
+        if (buttonType == "plus") {
             isPlusPressed = true;
         }
-        else
-        if (buttonType == "minus")
-        {
+        else if (buttonType == "minus") {
             isMinusPressed = true;
         }
     }
 
-    public void onPointerUpButton(string buttonType)
-    {
-        if (buttonType == "plus")
-        {
+    public void onPointerUpButton (string buttonType) {
+        if (buttonType == "plus") {
             isPlusPressed = false;
             pIt = 0;
         }
-        else
-        if (buttonType == "minus")
-        {
+        else if (buttonType == "minus") {
             isMinusPressed = false;
             mIt = 0;
         }

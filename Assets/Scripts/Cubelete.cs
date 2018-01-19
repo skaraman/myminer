@@ -13,25 +13,35 @@ public class Cubelete : MonoBehaviour {
     public GameObject animatingDestructible;
     public bool active = false;
 
+    public GameObject piecesSurface;
+
     private bool alreadyClicked = false;
+    private MeshRenderer mesh;
+    private bool rotate = false;
 
     void Start () {
+        mesh = GetComponent<MeshRenderer>();
+    }
+
+    public void EnableMeshR (bool en) {
+        mesh.enabled = en;
     }
 
     void LateUpdate () {
-        transform.Rotate(0, Time.deltaTime * turnSpeed, 0);
-        if (active) {
-            TestToRemove();
+        if (rotate) {
+            transform.Rotate(0, Time.deltaTime * turnSpeed, 0);
         }
     }
 
     void OnMouseDown () {
-
         if (cube.zoomIn && cube.zoomOut && alreadyClicked == false) {
-            gameObject.GetComponent<MeshRenderer>().enabled = false;
+            EnableMeshR(false);
             cube.addDeletedCubelete(x, y);
             alreadyClicked = true;
-            animatingDestructible.SetActive(true);
+            animatingDestructible = Instantiate(GetVersion(), gameObject.transform.parent);
+            var comp = animatingDestructible.GetComponent<Destructible>();
+            comp.TryThis(piecesSurface, gameObject);
+            Remove();
         }
     }
 
