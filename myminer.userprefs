@@ -1,19 +1,21 @@
 ﻿<Properties StartupConfiguration="{ECF4CAC5-D1CC-B0DA-AD40-E9364091905C}|">
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/TheCube.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/ScreenRecorder.cs">
     <Files>
-      <File FileName="Assets/Scripts/DragAndDrop.cs" Line="38" Column="14" />
-      <File FileName="Assets/Scripts/CameraHandler.cs" Line="4" Column="45" />
-      <File FileName="Assets/Scripts/ButtonProcessor.cs" Line="14" Column="20" />
-      <File FileName="Assets/Scripts/TheCube.cs" Line="160" Column="49" />
-      <File FileName="Assets/Scripts/Cubelete.cs" Line="43" Column="21" />
-      <File FileName="Assets/Scripts/Destructible.cs" Line="15" Column="1" />
+      <File FileName="Assets/Scripts/DragAndDrop.cs" Line="33" Column="79" />
+      <File FileName="Assets/Scripts/CameraHandler.cs" Line="7" Column="61" />
+      <File FileName="Assets/Scripts/ButtonProcessor.cs" Line="28" Column="5" />
+      <File FileName="Assets/Scripts/TheCube.cs" Line="139" Column="1" />
+      <File FileName="Assets/Scripts/Cubelete.cs" Line="46" Column="6" />
+      <File FileName="Assets/Scripts/Destructible.cs" Line="39" Column="37" />
+      <File FileName="Assets/Scripts/ScreenRecorder.cs" Line="40" Column="60" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/Users/sem/Desktop/dev/gm/unity/myminer/Assets/Scripts/TheCube.cs" relfile="Assets/Scripts/TheCube.cs" line="173" column="1" />
+      <Breakpoint file="/Users/sem/Desktop/dev/gm/unity/myminer/Assets/Scripts/TheCube.cs" relfile="Assets/Scripts/TheCube.cs" line="211" column="1" />
+      <Breakpoint file="/Users/sem/Desktop/dev/gm/unity/myminer/Assets/Scripts/TheCube.cs" relfile="Assets/Scripts/TheCube.cs" line="76" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

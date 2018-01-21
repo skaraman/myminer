@@ -39,8 +39,8 @@ public class Cubelete : MonoBehaviour {
             cube.addDeletedCubelete(x, y);
             alreadyClicked = true;
             animatingDestructible = Instantiate(GetVersion(), gameObject.transform.parent);
-            var comp = animatingDestructible.GetComponent<Destructible>();
-            comp.TryThis(piecesSurface, gameObject);
+            cube.destros.Add(animatingDestructible);
+            animatingDestructible.GetComponent<Destructible>().PublicReceiver(piecesSurface, gameObject);
             Remove();
         }
     }

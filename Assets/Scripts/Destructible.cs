@@ -2,13 +2,20 @@
 using System.Collections;
 
 public class Destructible : MonoBehaviour {
+    private bool dissolve;
+    private float amount;
+    private Renderer[] children;
+    private int updateDelayer;
     // Use this for initialization
-    void Start () {
-    }
-    // Update is called once per frame
-    void Update () { }
 
-    public void TryThis (GameObject piecesSurface, GameObject cubelete) {
+    void Start () {
+        dissolve = false;
+        amount = 0;
+        updateDelayer = 0;
+        children = gameObject.GetComponentsInChildren<Renderer>();
+    }
+
+    public void PublicReceiver (GameObject piecesSurface, GameObject cubelete) {
         StartCoroutine(
             FollowThrough(piecesSurface, cubelete)
         );
@@ -18,8 +25,20 @@ public class Destructible : MonoBehaviour {
         transform.localPosition = cubelete.transform.localPosition;
         yield return new WaitForSeconds(0.1f);
         transform.SetParent(piecesSurface.transform, true);
-        yield return new WaitForSeconds(2);
-        gameObject.SetActive(false);
-        Destroy(gameObject);
+        dissolve = true;
+    }
+
+    private void LateUpdate () {
+        if (dissolve && updateDelayer > 3) {
+            amount += 0.1f;
+            updateDelayer = 0;
+            foreach (var c in children) {
+                c.material.SetFloat("_DisAmount", amount);
+            }
+            if (amount > 1) {
+                Destroy(gameObject);
+            }
+        }
+        updateDelayer++;
     }
 }

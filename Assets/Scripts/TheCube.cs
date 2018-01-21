@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Microsoft.CSharp;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
@@ -24,7 +23,7 @@ public class TheCube : MonoBehaviour {
     public bool zoomOut = true;
     public GameObject piecesSurface;
     private bool faded = false;
-    //private bool tweaked = false;
+    private bool remade = true;
     private float xTracker;
     private float yTracker;
     private float xCubes;
@@ -37,8 +36,10 @@ public class TheCube : MonoBehaviour {
     private float maxCubeY = 9.225f;
     private float minCubeX = -9.6f;
     private float maxCubeX = 9.6f;
-    //private Data data = new Data ();
-    //private string cubedata;
+
+
+    public List<GameObject> destros;
+
     public Dictionary<string, bool> deletedCubeletes = new Dictionary<string, bool>();
     private List<List<CubeleteObject>> surfaceCubeletes = new List<List<CubeleteObject>>();
 
@@ -60,14 +61,19 @@ public class TheCube : MonoBehaviour {
     }
 
     void Update () {
+        if (destros.Count > 8) {
+            var removeDestro = destros[0];
+            destros.Remove(removeDestro);
+            Destroy(removeDestro);
+        }
         Vector3 currPos = transform.localPosition;
         if (currPos.z > zZoomLimit && faded == false) {
+            remade = false;
             FadeCube(true);
             FreeInteractibleSurfaceByZoom();
         }
         else if (currPos.z <= zZoomLimit && faded == true) {
             FadeCube(false);
-            RemakeInteractibleSurfaceByZoom();
         }
         if (faded == false) {
             if (currPos.y < minCubeY) {
@@ -88,59 +94,23 @@ public class TheCube : MonoBehaviour {
             cubeTrackPosition = currPos;
             xCubes = xTracker / 0.02f;
             yCubes = yTracker / 0.02f;
+            var xTakeaway = Mathf.Round(xCubes);
+            var yTakeaway = Mathf.Round(yCubes);
+            xTracker -= xTakeaway * 0.02f;
+            yTracker -= yTakeaway * 0.02f;
+            if (!remade) {
+                RemakeInteractibleSurfaceByZoom(xTakeaway, yTakeaway);
+            }
             if (Mathf.Abs(xCubes) > 1 || Mathf.Abs(yCubes) > 1) {
-                var xTakeaway = Mathf.Round(xCubes);
-                var yTakeaway = Mathf.Round(yCubes);
-                xTracker -= xTakeaway * 0.02f;
-                yTracker -= yTakeaway * 0.02f;
                 UpdateInteractibleSurface(xTakeaway, yTakeaway);
             }
         }
-        //	 else if (currPos.z < 0.3 && tweaked == false) {
-        //			TweakSurface (true);
-        //		} else if (currPos.z >= 0.3 && tweaked == true) {
-        //			TweakSurface (false);
-        //		}
     }
 
     void FadeCube (bool fade) {
         faded = fade;
         fakeSurface.SetActive(fade);
         surface.SetActive(!fade);
-    }
-
-    void TweakSurface (bool tweak) {
-        // tweaking surface has an inherent problem - moving position of cubeletes changes where they are positioned >< 
-        // maybe what i need to do is change spawnMinDist, or better yet, scale down the cubelete so it looks like there is space added betwixt
-        //		tweaked = tweak;
-        //		var children = surface.GetComponentsInChildren<Transform> ();x
-        //		for (var c = 1; c < children.Length; c++) {
-        //			var child = children [c];
-        //
-        //			float newX = 0.0f;
-        //			float newY = -GlobalYOffset;
-        //			float spacer;
-        //			if (tweak) {
-        //				spacer = 0.02f;
-        //			} else {
-        //				spacer = 0.04f;
-        //			}
-        //			int xit = Mathf.RoundToInt (Mathf.Abs (child.localPosition.x / spacer));
-        //			int yit = Mathf.RoundToInt (Mathf.Abs ((child.localPosition.y + GlobalYOffset) / spacer));
-        //
-        //			if (child.localPosition.x > 0) {
-        //				newX = Operator (child.localPosition.x, 0.02f * xit, tweak);
-        //			} else if (child.localPosition.x < 0) {
-        //				newX = Operator (child.localPosition.x, 0.02f * xit, !tweak);
-        //			}
-        //			if (child.localPosition.y + GlobalYOffset > 0) {
-        //				newY = Operator (child.localPosition.y, 0.02f * yit, tweak);
-        //			} else if (child.localPosition.y + GlobalYOffset < 0) {
-        //				newY = Operator (child.localPosition.y, 0.02f * yit, !tweak);
-        //			}
-        //			child.localPosition = new Vector3 (newX, newY, child.localPosition.z);
-        //		}
-
     }
 
     void FreeInteractibleSurfaceByZoom () {
@@ -156,8 +126,15 @@ public class TheCube : MonoBehaviour {
         }
     }
 
-    void RemakeInteractibleSurfaceByZoom () {
-        for (int xP = Left; xP <= Right; xP++) {
+    void RemakeInteractibleSurfaceByZoom (float xc, float yc) {
+        var yCubesAbs = (int)Mathf.Abs(yc);
+        var xCubesAbs = (int)Mathf.Abs(xc);
+        Right = xCubesAbs > 0 ? (int)(Right - xc) : Right;
+        Left = xCubesAbs > 0 ? (int)(Left - xc) : Left;
+        Top = yCubesAbs > 0 ? (int)(Top - yc) : Top;
+        Bottom = yCubesAbs > 0 ? (int)(Bottom - yc) : Bottom;
+
+        for (int xP = Left; xP < Right; xP++) {
             var layer = surfaceCubeletes[xP - Left];
             var currentCount = layer.Count;
             for (int yP = Bottom; yP < Top; yP++) {
@@ -170,7 +147,7 @@ public class TheCube : MonoBehaviour {
                 );
                 var cubeComp = newCubelete.gameObject.GetComponent<Cubelete>();
                 cubeComp.cube = this;
-                layer[yP - Bottom] = newCubelete;
+                layer.Add(newCubelete);
                 cubeComp.x = xP;
                 cubeComp.y = yP;
                 newCubelete.x = cubeComp.x;
@@ -185,6 +162,7 @@ public class TheCube : MonoBehaviour {
                 catch { }
             }
         }
+        remade = true;
     }
 
     public void MakeInteractibleSurface () {
@@ -230,7 +208,6 @@ public class TheCube : MonoBehaviour {
     }
 
     public void UpdateInteractibleSurface (float xCubes, float yCubes) {
-        Debug.Log(string.Format("X: {0}, Y: {1}", xCubes, yCubes));
         var yCubesAbs = (int)Mathf.Abs(yCubes);
         var xCubesAbs = (int)Mathf.Abs(xCubes);
         var postYCubes = yCubes;
@@ -362,7 +339,6 @@ public class TheCube : MonoBehaviour {
 
     public void addDeletedCubelete (int x, int y) {
         deletedCubeletes.Add(string.Format("{0},{1}", x, y), true);
-        Debug.Log(string.Format("{0},{1}", x, y));
     }
 
     public void SaveData () {
