@@ -23,7 +23,7 @@ public class TheCube : MonoBehaviour {
     public bool zoomOut = true;
     public GameObject piecesSurface;
     private bool faded = false;
-    private bool remade = true;
+    private bool remake = false;
     private float xTracker;
     private float yTracker;
     private float xCubes;
@@ -36,9 +36,9 @@ public class TheCube : MonoBehaviour {
     private float maxCubeY = 9.225f;
     private float minCubeX = -9.6f;
     private float maxCubeX = 9.6f;
-
-
+    public ScreenRecorder screenShotCamera;
     public List<GameObject> destros;
+    private string filename;
 
     public Dictionary<string, bool> deletedCubeletes = new Dictionary<string, bool>();
     private List<List<CubeleteObject>> surfaceCubeletes = new List<List<CubeleteObject>>();
@@ -68,12 +68,11 @@ public class TheCube : MonoBehaviour {
         }
         Vector3 currPos = transform.localPosition;
         if (currPos.z > zZoomLimit && faded == false) {
-            remade = false;
             FadeCube(true);
-            FreeInteractibleSurfaceByZoom();
         }
         else if (currPos.z <= zZoomLimit && faded == true) {
             FadeCube(false);
+            remake = true;
         }
         if (faded == false) {
             if (currPos.y < minCubeY) {
@@ -94,24 +93,39 @@ public class TheCube : MonoBehaviour {
             cubeTrackPosition = currPos;
             xCubes = xTracker / 0.02f;
             yCubes = yTracker / 0.02f;
-            var xTakeaway = Mathf.Round(xCubes);
-            var yTakeaway = Mathf.Round(yCubes);
-            xTracker -= xTakeaway * 0.02f;
-            yTracker -= yTakeaway * 0.02f;
-            if (!remade) {
-                RemakeInteractibleSurfaceByZoom(xTakeaway, yTakeaway);
-            }
             if (Mathf.Abs(xCubes) > 1 || Mathf.Abs(yCubes) > 1) {
-                UpdateInteractibleSurface(xTakeaway, yTakeaway);
+                var xTakeaway = Mathf.Round(xCubes);
+                var yTakeaway = Mathf.Round(yCubes);
+                xTracker -= xTakeaway * 0.02f;
+                yTracker -= yTakeaway * 0.02f;
+                if (remake) {
+                    RemakeInteractibleSurfaceByZoom(xTakeaway, yTakeaway);
+                }
+                else {
+                    UpdateInteractibleSurface(xTakeaway, yTakeaway);
+                }
             }
         }
     }
 
     void FadeCube (bool fade) {
+        if (fade) {
+            screenShotCamera.CaptureScreenshot(fade);
+        }
+    }
+
+
+
+    public void FadeCubeCallback (bool fade) {
+        filename = screenShotCamera.GrabFilename();
+        Debug.Log(filename);
         faded = fade;
         fakeSurface.SetActive(fade);
         surface.SetActive(!fade);
+        FreeInteractibleSurfaceByZoom();
+        remake = false;
     }
+
 
     void FreeInteractibleSurfaceByZoom () {
         var xLen = surfaceCubeletes.Count;
@@ -162,7 +176,7 @@ public class TheCube : MonoBehaviour {
                 catch { }
             }
         }
-        remade = true;
+        remake = false;
     }
 
     public void MakeInteractibleSurface () {

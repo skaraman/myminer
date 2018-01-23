@@ -9,6 +9,7 @@ using System.IO;
 // ffmpeg -i screen_3840x2160_%d.ppm -y test.avi
 
 public class ScreenRecorder : MonoBehaviour {
+    public TheCube cube;
     // 4k = 3840 x 2160   1080p = 1920 x 1080
     public int captureWidth = 800;
     public int captureHeight = 600;
@@ -21,10 +22,11 @@ public class ScreenRecorder : MonoBehaviour {
 
     // configure with raw, jpg, png, or ppm (simple raw format)
     public enum Format { RAW, JPG, PNG, PPM };
-    public Format format = Format.PPM;
+    public Format format = Format.PNG;
 
     // folder to write output (defaults to data path)
     public string folder;
+    public string filename;
 
     // private vars for screenshot
     private Rect rect;
@@ -35,6 +37,8 @@ public class ScreenRecorder : MonoBehaviour {
     // commands
     private bool captureScreenshot = false;
     private bool captureVideo = false;
+
+    private bool faded;
 
     // create a unique filename using a one-up variable
     private string uniqueFilename (int width, int height) {
@@ -57,7 +61,7 @@ public class ScreenRecorder : MonoBehaviour {
         }
 
         // use width, height, and counter for unique file name
-        var filename = string.Format("{0}/screen_{1}x{2}_{3}.{4}", folder, width, height, counter, format.ToString().ToLower());
+        filename = string.Format("{0}/screen_{1}x{2}_{3}.{4}", folder, width, height, counter, format.ToString().ToLower());
 
         // up counter for next call
         ++counter;
@@ -66,8 +70,14 @@ public class ScreenRecorder : MonoBehaviour {
         return filename;
     }
 
-    public void CaptureScreenshot () {
+
+    public void CaptureScreenshot (bool fade) {
         captureScreenshot = true;
+        faded = fade;
+    }
+
+    public string GrabFilename () {
+        return filename;
     }
 
     void Update () {
@@ -145,6 +155,8 @@ public class ScreenRecorder : MonoBehaviour {
                 renderTexture = null;
                 screenShot = null;
             }
+
+            cube.FadeCubeCallback(faded);
         }
     }
 }
