@@ -61,7 +61,7 @@ public class TheCube : MonoBehaviour {
     }
 
     void Update () {
-        if (destros.Count > 8) {
+        if (destros.Count > 4) {
             var removeDestro = destros[0];
             destros.Remove(removeDestro);
             Destroy(removeDestro);
@@ -105,27 +105,32 @@ public class TheCube : MonoBehaviour {
                     UpdateInteractibleSurface(xTakeaway, yTakeaway);
                 }
             }
+            else if (remake) {
+                RemakeInteractibleSurfaceByZoom(0, 0);
+            }
         }
     }
 
     void FadeCube (bool fade) {
+        faded = fade;
+
         if (fade) {
-            screenShotCamera.CaptureScreenshot(fade);
+            screenShotCamera.CaptureScreenshot(fade, string.Format("Assets/screens/{0}_{1}_{2}_{3}.png", Left, Right, Top, Bottom));
+        }
+        else {
+            fakeSurface.SetActive(fade);
+            surface.SetActive(!fade);
         }
     }
 
-
-
     public void FadeCubeCallback (bool fade) {
-        filename = screenShotCamera.GrabFilename();
+        filename = screenShotCamera.Filename;
         Debug.Log(filename);
-        faded = fade;
         fakeSurface.SetActive(fade);
         surface.SetActive(!fade);
         FreeInteractibleSurfaceByZoom();
         remake = false;
     }
-
 
     void FreeInteractibleSurfaceByZoom () {
         var xLen = surfaceCubeletes.Count;

@@ -5,18 +5,15 @@
       <File FileName="Assets/Scripts/DragAndDrop.cs" Line="33" Column="79" />
       <File FileName="Assets/Scripts/CameraHandler.cs" Line="7" Column="61" />
       <File FileName="Assets/Scripts/ButtonProcessor.cs" Line="28" Column="5" />
-      <File FileName="Assets/Scripts/TheCube.cs" Line="120" Column="18" />
+      <File FileName="Assets/Scripts/TheCube.cs" Line="146" Column="6" />
       <File FileName="Assets/Scripts/Cubelete.cs" Line="46" Column="6" />
       <File FileName="Assets/Scripts/Destructible.cs" Line="39" Column="37" />
-      <File FileName="Assets/Scripts/ScreenRecorder.cs" Line="24" Column="1" />
+      <File FileName="Assets/Scripts/ScreenRecorder.cs" Line="51" Column="53" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/sem/Desktop/dev/gm/unity/myminer/Assets/Scripts/TheCube.cs" relfile="Assets/Scripts/TheCube.cs" line="219" column="1" />
-      <Breakpoint file="/Users/sem/Desktop/dev/gm/unity/myminer/Assets/Scripts/TheCube.cs" relfile="Assets/Scripts/TheCube.cs" line="115" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp-firstpass PreferredExecutionTarget="MonoDevelop.Default" />

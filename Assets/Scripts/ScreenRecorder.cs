@@ -26,7 +26,7 @@ public class ScreenRecorder : MonoBehaviour {
 
     // folder to write output (defaults to data path)
     public string folder;
-    public string filename;
+    public string publicfilename;
 
     // private vars for screenshot
     private Rect rect;
@@ -61,23 +61,29 @@ public class ScreenRecorder : MonoBehaviour {
         }
 
         // use width, height, and counter for unique file name
-        filename = string.Format("{0}/screen_{1}x{2}_{3}.{4}", folder, width, height, counter, format.ToString().ToLower());
+        publicfilename = string.Format("{0}/screen_{1}x{2}_{3}.{4}", folder, width, height, counter, format.ToString().ToLower());
 
         // up counter for next call
         ++counter;
 
         // return unique filename
-        return filename;
+        return publicfilename;
     }
 
 
-    public void CaptureScreenshot (bool fade) {
+    public void CaptureScreenshot (bool fade, string fn) {
         captureScreenshot = true;
+        Filename = fn;
         faded = fade;
     }
 
-    public string GrabFilename () {
-        return filename;
+    public string Filename {
+        get {
+            return publicfilename;
+        }
+        set {
+            publicfilename = value;
+        }
     }
 
     void Update () {
@@ -114,7 +120,7 @@ public class ScreenRecorder : MonoBehaviour {
             RenderTexture.active = null;
 
             // get our unique filename
-            string filename = uniqueFilename((int)rect.width, (int)rect.height);
+            string filename = publicfilename != "" ? publicfilename : uniqueFilename((int)rect.width, (int)rect.height);
 
             // pull in our file header/data bytes for the specified image format (has to be done from main thread)
             byte[] fileHeader = null;
