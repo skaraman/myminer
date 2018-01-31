@@ -41,6 +41,7 @@ public class TheCube : MonoBehaviour {
     private string filename;
 
     public Dictionary<string, bool> deletedCubeletes = new Dictionary<string, bool>();
+    public Dictionary<string, bool> screensList = new Dictionary<string, bool>();
     private List<List<CubeleteObject>> surfaceCubeletes = new List<List<CubeleteObject>>();
 
     private List<CubeleteObject> temporaryFreedCubeletes = new List<CubeleteObject>();
@@ -48,7 +49,7 @@ public class TheCube : MonoBehaviour {
     void Start () {
         cubeleteBasePosition = cubelete.transform.localPosition;
         cubeTrackPosition = transform.localPosition;
-        if (File.Exists((Application.persistentDataPath + "/clobber.sem"))) {
+        if (File.Exists((Application.persistentDataPath + "/bew.wyco"))) {
             LoadData();
         }
         MakeInteractibleSurface();
@@ -113,9 +114,15 @@ public class TheCube : MonoBehaviour {
 
     void FadeCube (bool fade) {
         faded = fade;
-
         if (fade) {
-            screenShotCamera.CaptureScreenshot(fade, string.Format("Assets/screens/{0}_{1}_{2}_{3}.png", Left, Right, Top, Bottom));
+            var screenname = string.Format("Assets/screens/{0}_{1}_{2}_{3}.png", Left, Right, Top, Bottom);
+            if (!screensList.ContainsKey(screenname)) {
+                screensList.Add(screenname, true);
+                screenShotCamera.CaptureScreenshot(fade, screenname);
+            }
+            else {
+                FadeCubeCallback(fade);
+            }
         }
         else {
             fakeSurface.SetActive(fade);
@@ -124,8 +131,6 @@ public class TheCube : MonoBehaviour {
     }
 
     public void FadeCubeCallback (bool fade) {
-        filename = screenShotCamera.Filename;
-        Debug.Log(filename);
         fakeSurface.SetActive(fade);
         surface.SetActive(!fade);
         FreeInteractibleSurfaceByZoom();
@@ -173,12 +178,10 @@ public class TheCube : MonoBehaviour {
                 newCubelete.y = cubeComp.y;
                 newCubelete.gameObject.SetActive(true);
                 cubeComp.EnableMeshR(true);
-                try {
-                    if (deletedCubeletes[string.Format("{0},{1}", cubeComp.x, cubeComp.y)]) {
-                        newCubelete.gameObject.SetActive(false);
-                    }
+                if (deletedCubeletes.ContainsKey(string.Format("{0},{1}", cubeComp.x, cubeComp.y))) {
+                    newCubelete.gameObject.SetActive(false);
                 }
-                catch { }
+
             }
         }
         remake = false;
@@ -212,12 +215,11 @@ public class TheCube : MonoBehaviour {
                     newCubelete.y = cubeComp.y;
                     cubeComp.cube = this;
                     surfaceCubeletes[i].Add(newCubelete);
-                    try {
-                        if (deletedCubeletes[string.Format("{0},{1}", cubeComp.x, cubeComp.y)]) {
-                            newCubelete.gameObject.SetActive(false);
-                        }
+
+                    if (deletedCubeletes.ContainsKey(string.Format("{0},{1}", cubeComp.x, cubeComp.y))) {
+                        newCubelete.gameObject.SetActive(false);
                     }
-                    catch { }
+
                 }
                 yStart++;
             }
@@ -343,12 +345,11 @@ public class TheCube : MonoBehaviour {
                 newCubelete.y = cubeComp.y;
                 newCubelete.gameObject.SetActive(true);
                 cubeComp.EnableMeshR(true);
-                try {
-                    if (deletedCubeletes[string.Format("{0},{1}", cubeComp.x, cubeComp.y)]) {
-                        newCubelete.gameObject.SetActive(false);
-                    }
+
+                if (deletedCubeletes.ContainsKey(string.Format("{0},{1}", cubeComp.x, cubeComp.y))) {
+                    newCubelete.gameObject.SetActive(false);
                 }
-                catch { }
+
             }
         }
         if (post) {
@@ -362,26 +363,40 @@ public class TheCube : MonoBehaviour {
 
     public void SaveData () {
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + "/clobber.sem");
+        FileStream file = File.Create(Application.persistentDataPath + "/bew.wyco");
         CubeData data = new CubeData();
         data.deletedCubeletesData = deletedCubeletes;
+        data.screensList = screensList;
+        data.mainCubeLocation = new Dictionary<string, float>() {
+            { "x", transform.localPosition.x },
+            { "y", transform.localPosition.y },
+            { "z", 0.5f }
+        };
         bf.Serialize(file, data);
         file.Close();
     }
 
     public void LoadData () {
-        if (File.Exists((Application.persistentDataPath + "/clobber.sem"))) {
+        if (File.Exists((Application.persistentDataPath + "/bew.wyco"))) {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath + "/clobber.sem", FileMode.Open);
+            FileStream file = File.Open(Application.persistentDataPath + "/bew.wyco", FileMode.Open);
             CubeData data = (CubeData)bf.Deserialize(file);
             file.Close();
-            deletedCubeletes = data.deletedCubeletesData;
+            deletedCubeletes = data.deletedCubeletesData != null ? data.deletedCubeletesData : deletedCubeletes;
+            screensList = data.screensList != null ? data.screensList : screensList;
+            if (data.mainCubeLocation != null) {
+                transform.localPosition = new Vector3(
+                    data.mainCubeLocation["x"],
+                    data.mainCubeLocation["y"],
+                    data.mainCubeLocation["z"]
+                );
+            }
         }
     }
 
     public void DeleteSave () {
-        if (File.Exists(Application.persistentDataPath + "/clobber.sem")) {
-            File.Delete(Application.persistentDataPath + "/clobber.sem");
+        if (File.Exists(Application.persistentDataPath + "/bew.wyco")) {
+            File.Delete(Application.persistentDataPath + "/bew.wyco");
         }
     }
 
@@ -432,4 +447,5 @@ public class CubeleteObject {
 public class CubeData {
     public Dictionary<string, bool> deletedCubeletesData;
     public Dictionary<string, float> mainCubeLocation;
+    public Dictionary<string, bool> screensList;
 }

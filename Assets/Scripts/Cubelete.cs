@@ -24,6 +24,7 @@ public class Cubelete : MonoBehaviour {
     }
 
     public void EnableMeshR (bool en) {
+        mesh = mesh != null ? mesh : GetComponent<MeshRenderer>();
         mesh.enabled = en;
     }
 
