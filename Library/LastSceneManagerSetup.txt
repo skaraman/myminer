@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/_scenes/lbmmain.unity
-  isLoaded: 1
-  isActive: 1
