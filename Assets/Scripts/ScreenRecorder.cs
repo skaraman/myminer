@@ -20,9 +20,9 @@ public class ScreenRecorder : MonoBehaviour {
     // optimize for many screenshots will not destroy any objects so future screenshots will be fast
     public bool optimizeForManyScreenshots = true;
 
-    // configure with raw, jpg, png, or ppm (simple raw format)
-    public enum Format { RAW, JPG, PNG, PPM };
-    public Format format = Format.PNG;
+    // configure with raw, jpg, png, or ppm (simple raw format), SP = Sprite
+    public enum Format { RAW, JPG, PNG, PPM, SP };
+    public Format format = Format.SP;
 
     // folder to write output (defaults to data path)
     public string folder;
@@ -125,6 +125,8 @@ public class ScreenRecorder : MonoBehaviour {
             // pull in our file header/data bytes for the specified image format (has to be done from main thread)
             byte[] fileHeader = null;
             byte[] fileData = null;
+            bool thread = true;
+            Sprite sp = null;
             if (format == Format.RAW) {
                 fileData = screenShot.GetRawTextureData();
             }
@@ -134,23 +136,34 @@ public class ScreenRecorder : MonoBehaviour {
             else if (format == Format.JPG) {
                 fileData = screenShot.EncodeToJPG();
             }
-            else // ppm
+            else if (format == Format.PPM) // ppm
             {
                 // create a file header for ppm formatted file
                 string headerStr = string.Format("P6\n{0} {1}\n255\n", rect.width, rect.height);
                 fileHeader = System.Text.Encoding.ASCII.GetBytes(headerStr);
                 fileData = screenShot.GetRawTextureData();
             }
+            else if (format == Format.SP) {
+                thread = false; // debugger - normal value is false
+                if (thread == true) {
+                    fileData = screenShot.EncodeToPNG();
+                }
+                screenShot.Apply();
+                sp = Sprite.Create(screenShot, rect, new Vector2(0, 0));
+                cube.PutScreenshot(sp, Filename, screenShot);
+            }
 
             // create new thread to save the image to file (only operation that can be done in background)
-            new System.Threading.Thread(() => {
-                // create file and write optional header with image bytes
-                var f = System.IO.File.Create(filename);
-                if (fileHeader != null) f.Write(fileHeader, 0, fileHeader.Length);
-                f.Write(fileData, 0, fileData.Length);
-                f.Close();
-                Debug.Log(string.Format("Wrote screenshot {0} of size {1}", filename, fileData.Length));
-            }).Start();
+            if (thread) {
+                new System.Threading.Thread(() => {
+                    // create file and write optional header with image bytes
+                    var f = System.IO.File.Create(filename);
+                    if (fileHeader != null) f.Write(fileHeader, 0, fileHeader.Length);
+                    f.Write(fileData, 0, fileData.Length);
+                    f.Close();
+                    Debug.Log(string.Format("Wrote screenshot {0} of size {1}", filename, fileData.Length));
+                }).Start();
+            }
 
             // unhide optional game object if set
             if (hideGameObject != null) hideGameObject.SetActive(true);
@@ -162,7 +175,10 @@ public class ScreenRecorder : MonoBehaviour {
                 screenShot = null;
             }
 
-            cube.FadeCubeCallback(faded);
+            // callbacks
+            if (faded) {
+                cube.FadeCubeCallback(faded);
+            }
         }
     }
 }
