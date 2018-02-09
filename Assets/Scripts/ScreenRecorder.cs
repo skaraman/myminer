@@ -39,6 +39,7 @@ public class ScreenRecorder : MonoBehaviour {
     private bool captureVideo = false;
 
     private bool faded;
+    private Color black = new Color(0, 0, 0);
 
     // create a unique filename using a one-up variable
     private string uniqueFilename (int width, int height) {
@@ -86,6 +87,26 @@ public class ScreenRecorder : MonoBehaviour {
         }
     }
 
+    Texture2D RemoveColor (Color c, Texture2D imgs) {
+        Color[] pixels = imgs.GetPixels(0, 0, imgs.width, imgs.height, 0);
+
+        Color newcol = new Color(1.00f, 0.78f, 0.01f, 1);
+        Color transp = new Color(1, 1, 1, 0);
+
+        for (int p = 0; p < pixels.Length; p++) {
+            if (pixels[p].r <= 0.2 && pixels[p].g <= 0.2 && pixels[p].b <= 0.2) {
+                pixels[p] = newcol;
+            }
+            else {
+                pixels[p] = transp;
+            }
+        }
+
+        imgs.SetPixels(0, 0, imgs.width, imgs.height, pixels, 0);
+        imgs.Apply();
+        return imgs;
+    }
+
     void Update () {
         // check keyboard 'k' for one time screenshot capture and holding down 'v' for continious screenshots
         captureScreenshot |= Input.GetKeyDown("k");
@@ -102,7 +123,7 @@ public class ScreenRecorder : MonoBehaviour {
                 // creates off-screen render texture that can rendered into
                 rect = new Rect(0, 0, captureWidth, captureHeight);
                 renderTexture = new RenderTexture(captureWidth, captureHeight, 24);
-                screenShot = new Texture2D(captureWidth, captureHeight, TextureFormat.RGB24, false);
+                screenShot = new Texture2D(captureWidth, captureHeight, TextureFormat.ARGB32, false);
             }
 
             // get main camera and manually render scene into rt
@@ -114,7 +135,7 @@ public class ScreenRecorder : MonoBehaviour {
             // render texture active and then read the pixels
             RenderTexture.active = renderTexture;
             screenShot.ReadPixels(rect, 0, 0);
-
+            RemoveColor(black, screenShot);
             // reset active camera texture and render texture
             camera.targetTexture = null;
             RenderTexture.active = null;

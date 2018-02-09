@@ -26,11 +26,15 @@ public class TheCube : MonoBehaviour {
 
     private bool faded = false;
     private bool remake = false;
+    private bool loaded = false;
 
     private float xTracker;
     private float yTracker;
     private float xCubes;
     private float yCubes;
+
+    private float xStart;
+    private float yStart;
 
     private int Left;
     private int Right;
@@ -50,7 +54,8 @@ public class TheCube : MonoBehaviour {
     public Dictionary<string, bool> deletedCubeletes = new Dictionary<string, bool>();
     public Dictionary<string, string> screensList = new Dictionary<string, string>();
     private bool screenAdded = false;
-    private Color screenColor = new Color(1, .83f, .83f, .16f);
+
+    private Color screenColor = new Color(1, .83f, .83f, 1);
 
     private List<List<CubeleteObject>> surfaceCubeletes = new List<List<CubeleteObject>>();
     private List<CubeleteObject> temporaryFreedCubeletes = new List<CubeleteObject>();
@@ -62,12 +67,13 @@ public class TheCube : MonoBehaviour {
 
     CubeData data;
     void Start () {
+        xStart = -xMax / 2;
+        yStart = -yMax / 2;
         data = new CubeData();
         cubeleteBasePosition = cubelete.transform.localPosition;
         cubeTrackPosition = transform.localPosition;
         if (File.Exists((Application.persistentDataPath + "/bew.wyco"))) {
             LoadData();
-            cubeTrackPosition = transform.localPosition;
         }
         MakeInteractibleSurface();
     }
@@ -149,7 +155,7 @@ public class TheCube : MonoBehaviour {
         byte[] d = ss.GetRawTextureData();
         screensList.Add(name, d.ToString());
         GameObject newss;
-        if (cubeSaveNeeded) {
+        if (cubeSaveNeeded && spriteChildren != null && spriteChildren[name]) {
             newss = spriteChildren[name];
         }
         else {
@@ -252,43 +258,46 @@ public class TheCube : MonoBehaviour {
     public void MakeInteractibleSurface () {
         // every 0.02 of parent position is 1 cubelete width/height
         // so i have to create all cubeletes based on current parent position
-        var xStart = -xMax / 2;
-        var yStart = -yMax / 2;
-        Top = (int)-yStart;
-        Bottom = (int)yStart;
-        Left = (int)xStart;
-        Right = (int)-xStart;
-        for (int i = 0; i < xMax; i++) {
+        if (loaded == false) {
+            Top = (int)-yStart;
+            Bottom = (int)yStart;
+            Left = (int)xStart;
+            Right = (int)-xStart;
+        }
+        for (int i = Left; i < Right; i++) {
             surfaceCubeletes.Add(new List<CubeleteObject>());
-            for (int j = 0; j < yMax; j++) {
+            for (int j = Bottom; j < Top; j++) {
                 for (int k = 0; k < zMax; k++) {
                     CubeleteObject newCubelete = new CubeleteObject();
                     newCubelete.gameObject = Instantiate(cubelete, surface.transform);
                     newCubelete.gameObject.transform.localPosition = new Vector3(
-                        cubeleteBasePosition.x + (spawnMinDist * xStart),
-                        cubeleteBasePosition.y + (spawnMinDist * yStart) - GlobalYOffset,
+                        cubeleteBasePosition.x + (spawnMinDist * i),
+                        cubeleteBasePosition.y + (spawnMinDist * j) - GlobalYOffset,
                         cubeleteBasePosition.z + (spawnMinDist * k)
                     );
                     var cubeComp = newCubelete.gameObject.GetComponent<Cubelete>();
-                    cubeComp.x = (int)xStart;
-                    cubeComp.y = (int)yStart;
+                    cubeComp.x = i;
+                    cubeComp.y = j;
                     cubeComp.piecesSurface = piecesSurface;
                     newCubelete.x = cubeComp.x;
                     newCubelete.y = cubeComp.y;
                     cubeComp.cube = this;
-                    surfaceCubeletes[i].Add(newCubelete);
+                    surfaceCubeletes[i - Left].Add(newCubelete);
                     if (deletedCubeletes.ContainsKey(string.Format("{0},{1}", cubeComp.x, cubeComp.y))) {
                         newCubelete.gameObject.SetActive(false);
                     }
                 }
-                yStart++;
             }
-            xStart++;
-            yStart = -yMax / 2;
         }
     }
 
     public void UpdateInteractibleSurface (float xCubes, float yCubes) {
+        if (xCubes > 40f) {
+            xCubes = 40f;
+        }
+        if (yCubes > 48f) {
+            yCubes = 48f;
+        }
         var yCubesAbs = (int)Mathf.Abs(yCubes);
         var xCubesAbs = (int)Mathf.Abs(xCubes);
         var postYCubes = yCubes;
@@ -476,6 +485,17 @@ public class TheCube : MonoBehaviour {
                     data.mainCubeLocation["y"],
                     data.mainCubeLocation["z"]
                 );
+                var oldTrack = cubeTrackPosition;
+                cubeTrackPosition = transform.localPosition;
+                var tempXTracker = (cubeTrackPosition.x - oldTrack.x);
+                var tempYTracker = (cubeTrackPosition.y - oldTrack.y);
+                var tempXCubes = tempXTracker / 0.02f;
+                var tempYCubes = tempYTracker / 0.02f;
+                Left = (int)xStart - (int)tempXCubes;
+                Right = (int)-xStart - (int)tempXCubes;
+                Top = (int)-yStart - (int)tempYCubes;
+                Bottom = (int)yStart - (int)tempYCubes;
+                loaded = true;
             }
         }
     }
