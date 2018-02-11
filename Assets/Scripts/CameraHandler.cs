@@ -58,8 +58,8 @@ public class CameraHandler : MonoBehaviour {
         if (newZ < 0.15f) {
             newZ = 0.15f;
         }
-        if (newZ > 15.0f) {
-            newZ = 15.0f;
+        if (newZ > 15f) {
+            newZ = 15f;
         }
         theCube.transform.position = new Vector3(cubePosition.x, cubePosition.y, newZ);
     }

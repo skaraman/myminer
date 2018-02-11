@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System;
 
 public class TheCube : MonoBehaviour {
     public GameObject cubelete;
@@ -12,6 +13,7 @@ public class TheCube : MonoBehaviour {
     public GameObject fakeVolume;
     public float spawnMinDist;
     public float GlobalYOffset;
+    public float GlobalXOffset;
     public float yMax;
     public float xMax;
     public float zMax;
@@ -53,17 +55,19 @@ public class TheCube : MonoBehaviour {
 
     public Dictionary<string, bool> deletedCubeletes = new Dictionary<string, bool>();
     public Dictionary<string, string> screensList = new Dictionary<string, string>();
-    private bool screenAdded = false;
 
     private Color screenColor = new Color(1, .83f, .83f, 1);
 
     private List<List<CubeleteObject>> surfaceCubeletes = new List<List<CubeleteObject>>();
     private List<CubeleteObject> temporaryFreedCubeletes = new List<CubeleteObject>();
-    private Dictionary<string, GameObject> spriteChildren;
+    private Dictionary<string, GameObject> spriteChildren = new Dictionary<string, GameObject>();
 
     private int cubeSaveLimit = 30;
     private int cubeSaveIterator = 0;
     private bool cubeSaveNeeded = false;
+
+    private float mainXTracker;
+    private float mainYTracker;
 
     CubeData data;
     void Start () {
@@ -135,9 +139,9 @@ public class TheCube : MonoBehaviour {
                 else {
                     UpdateInteractibleSurface(xTakeaway, yTakeaway);
                 }
-                if (cubeSaveNeeded) {
-                    SaveScreenshot(false, string.Format("{0}_{1}_{2}_{3}", Left, Right, Top, Bottom));
-                }
+                mainXTracker += xTakeaway;
+                mainYTracker += yTakeaway;
+                Debug.Log(string.Format("{0}, {1}", mainXTracker, mainYTracker));
                 SaveData("maincubelocation");
             }
             else if (remake) {
@@ -147,29 +151,40 @@ public class TheCube : MonoBehaviour {
     }
 
     void SaveScreenshot (bool fade, string ssname) {
-        screenAdded = true;
         screenShotCamera.CaptureScreenshot(fade, ssname);
     }
 
     public void PutScreenshot (Sprite file, string name, Texture2D ss) {
-        byte[] d = ss.GetRawTextureData();
-        screensList.Add(name, d.ToString());
         GameObject newss;
-        if (cubeSaveNeeded && spriteChildren != null && spriteChildren[name]) {
+        SpriteRenderer newssS;
+        PsuedoMono newssP;
+        byte[] d = ss.GetRawTextureData();
+        if (screensList.ContainsKey(name)) {
+            screensList.Remove(name);
+        }
+        screensList.Add(name, d.ToString());
+        if (spriteChildren != null && spriteChildren.ContainsKey(name)) {
             newss = spriteChildren[name];
+            newssS = newss.GetComponent<SpriteRenderer>();
+            newssP = newss.GetComponent<PsuedoMono>();
         }
         else {
-
             newss = Instantiate(spriteGO, spriteHolder.transform);
+            spriteChildren.Add(name, newss);
+            newssS = newss.AddComponent<SpriteRenderer>();
+            newssP = newss.AddComponent<PsuedoMono>();
         }
-        var newssS = newss.AddComponent<SpriteRenderer>();
-        var newssP = newss.AddComponent<PsuedoMono>();
         newssP.color = screenColor;
         newssS.sprite = file;
         newss.name = name;
+        var x = (0.01f * -(mainXTracker));
+
+        var y = (0.01f * -(mainYTracker));
+
+        Debug.Log(string.Format("x - {0}, y - {1}", x, y));
         newss.transform.localPosition = new Vector3(
-            0,
-            0,
+            x,
+            y,
             0
         );
     }
@@ -177,13 +192,7 @@ public class TheCube : MonoBehaviour {
     void FadeCube (bool fade) {
         faded = fade;
         if (fade) {
-            var screenname = string.Format("{0}_{1}_{2}_{3}", Left, Right, Top, Bottom);
-            if (!screensList.ContainsKey(screenname) || cubeSaveNeeded) {
-                SaveScreenshot(fade, screenname);
-            }
-            else {
-                FadeCubeCallback(fade);
-            }
+            FadeCubeCallback(fade);
         }
         else {
             fakeSurface.SetActive(fade);
@@ -192,14 +201,11 @@ public class TheCube : MonoBehaviour {
     }
 
     public void FadeCubeCallback (bool fade) {
-        if (screenAdded) {
-            string mode = "screenslist";
-            if (fade) {
-                mode = "cubeletes_screenslist";
-            }
-            SaveData(mode);
-            screenAdded = false;
+        string mode = "screenslist";
+        if (fade) {
+            mode = "cubeletes_screenslist";
         }
+        SaveData(mode);
         fakeSurface.SetActive(fade);
         surface.SetActive(!fade);
         FreeInteractibleSurfaceByZoom();
@@ -233,7 +239,7 @@ public class TheCube : MonoBehaviour {
                 CubeleteObject newCubelete = temporaryFreedCubeletes[0];
                 temporaryFreedCubeletes.RemoveAt(0);
                 newCubelete.gameObject.transform.localPosition = new Vector3(
-                    cubeleteBasePosition.x + (spawnMinDist * (xP)),
+                    cubeleteBasePosition.x + (spawnMinDist * (xP)) - GlobalXOffset,
                     cubeleteBasePosition.y + (spawnMinDist * (yP)) - GlobalYOffset,
                     cubeleteBasePosition.z
                 );
@@ -271,7 +277,7 @@ public class TheCube : MonoBehaviour {
                     CubeleteObject newCubelete = new CubeleteObject();
                     newCubelete.gameObject = Instantiate(cubelete, surface.transform);
                     newCubelete.gameObject.transform.localPosition = new Vector3(
-                        cubeleteBasePosition.x + (spawnMinDist * i),
+                        cubeleteBasePosition.x + (spawnMinDist * i) - GlobalXOffset,
                         cubeleteBasePosition.y + (spawnMinDist * j) - GlobalYOffset,
                         cubeleteBasePosition.z + (spawnMinDist * k)
                     );
@@ -380,7 +386,7 @@ public class TheCube : MonoBehaviour {
                 CubeleteObject newCubelete = temporaryFreedCubeletes[0];
                 temporaryFreedCubeletes.RemoveAt(0);
                 newCubelete.gameObject.transform.localPosition = new Vector3(
-                    cubeleteBasePosition.x + (spawnMinDist * (yCubesAbs > 0 ? addX + xP : addX - xP)),
+                    cubeleteBasePosition.x + (spawnMinDist * (yCubesAbs > 0 ? addX + xP : addX - xP)) - GlobalXOffset,
                     cubeleteBasePosition.y + (spawnMinDist * (xCubesAbs > 0 ? addY + yP : addY - yP)) - GlobalYOffset,
                     cubeleteBasePosition.z
                 );
@@ -425,12 +431,14 @@ public class TheCube : MonoBehaviour {
     }
 
     public void addDeletedCubelete (int x, int y) {
+        Debug.Log(string.Format("delete - {0}, {1}", x, y));
         deletedCubeletes.Add(string.Format("{0},{1}", x, y), true);
         cubeSaveNeeded = true;
+        var screenname = string.Format("{0}_{1}_{2}_{3}", Left, Right, Top, Bottom);
+        SaveScreenshot(false, screenname);
     }
 
     public void SaveData (string mode) {
-        Debug.Log(string.Format("save initiated - {0}", mode));
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath + "/bew.wyco");
         if (mode == "cubeletes" ||
@@ -556,7 +564,7 @@ public class CubeleteObject {
     public int y;
 }
 
-[System.Serializable]
+[Serializable]
 public class CubeData {
     public Dictionary<string, bool> deletedCubeletesData;
     public Dictionary<string, float> mainCubeLocation;

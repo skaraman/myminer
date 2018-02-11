@@ -94,7 +94,14 @@ public class ScreenRecorder : MonoBehaviour {
         Color transp = new Color(1, 1, 1, 0);
 
         for (int p = 0; p < pixels.Length; p++) {
-            if (pixels[p].r <= 0.2 && pixels[p].g <= 0.2 && pixels[p].b <= 0.2) {
+            if ((pixels[p].r <= 1 &&
+                pixels[p].g <= 1 &&
+                pixels[p].b <= 1 &&
+                pixels[p].r == pixels[p].g &&
+                pixels[p].g == pixels[p].b) ||
+                (pixels[p].r <= .99f &&
+                 pixels[p].g <= .99f &&
+                 pixels[p].b <= .99f)) {
                 pixels[p] = newcol;
             }
             else {
@@ -123,6 +130,7 @@ public class ScreenRecorder : MonoBehaviour {
                 // creates off-screen render texture that can rendered into
                 rect = new Rect(0, 0, captureWidth, captureHeight);
                 renderTexture = new RenderTexture(captureWidth, captureHeight, 24);
+                renderTexture.filterMode = FilterMode.Point;
                 screenShot = new Texture2D(captureWidth, captureHeight, TextureFormat.ARGB32, false);
             }
 
@@ -135,7 +143,7 @@ public class ScreenRecorder : MonoBehaviour {
             // render texture active and then read the pixels
             RenderTexture.active = renderTexture;
             screenShot.ReadPixels(rect, 0, 0);
-            RemoveColor(black, screenShot);
+            RemoveColor(black, screenShot);    //************************************************************
             // reset active camera texture and render texture
             camera.targetTexture = null;
             RenderTexture.active = null;
@@ -170,7 +178,9 @@ public class ScreenRecorder : MonoBehaviour {
                     fileData = screenShot.EncodeToPNG();
                 }
                 screenShot.Apply();
+                screenShot.filterMode = FilterMode.Point;
                 sp = Sprite.Create(screenShot, rect, new Vector2(0, 0));
+
                 cube.PutScreenshot(sp, Filename, screenShot);
             }
 

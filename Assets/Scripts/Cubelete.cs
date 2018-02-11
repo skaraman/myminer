@@ -60,5 +60,6 @@ public class Cubelete : MonoBehaviour {
 
     void Remove () {
         gameObject.SetActive(false);
+        alreadyClicked = false;
     }
 }
