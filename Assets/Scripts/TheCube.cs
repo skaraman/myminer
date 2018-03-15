@@ -43,36 +43,60 @@ public class TheCube : MonoBehaviour {
     private int Top;
     private int Bottom;
 
-    private float minCubeY = -9.93f;
-    private float maxCubeY = 9.225f;
-    private float minCubeX = -9.6f;
-    private float maxCubeX = 9.6f;
+    private int LeftMax = -500;
+    private int RightMax = 499;
+    private int TopMax = 519;
+    private int BottomMax = -480;
 
-    public ScreenRecorder screenShotCamera;
+    private int ogLeft;
+    private int ogRight;
+    private int ogTop;
+    private int ogBottom;
+
+    private float minCubeYZoomed = -10f;
+    private float maxCubeYZoomed = 10f;
+    private float minCubeXZoomed = -10f;
+    private float maxCubeXZoomed = 10f;
+
+    private float minCubeYFaded = -10f;
+    private float maxCubeYFaded = 10f;
+    private float minCubeXFaded = -10f;
+    private float maxCubeXFaded = 10f;
+
     public List<GameObject> destros;
     public GameObject spriteHolder;
     public GameObject spriteGO;
 
     public Dictionary<string, bool> deletedCubeletes = new Dictionary<string, bool>();
-    public Dictionary<string, string> screensList = new Dictionary<string, string>();
+    public Dictionary<string, bool> screensList = new Dictionary<string, bool>();
 
     private Color screenColor = new Color(1, .83f, .83f, 1);
+    private Color newcol = new Color(1.00f, 0.78f, 0.01f, 1);
+    private Color transp = new Color(1, 1, 1, 0);
+    private Rect rect;
 
     private List<List<CubeleteObject>> surfaceCubeletes = new List<List<CubeleteObject>>();
     private List<CubeleteObject> temporaryFreedCubeletes = new List<CubeleteObject>();
     private Dictionary<string, GameObject> spriteChildren = new Dictionary<string, GameObject>();
 
-    private int cubeSaveLimit = 30;
+    public int cubeSaveLimit = 30;
     private int cubeSaveIterator = 0;
-    private bool cubeSaveNeeded = false;
+    public bool cubeSaveNeeded = false;
 
-    private float mainXTracker;
-    private float mainYTracker;
+    private int captureWidth;
+    private int captureHeight;
 
     CubeData data;
     void Start () {
+        captureWidth = (int)xMax;
+        captureHeight = (int)yMax;
+        rect = new Rect(0, 0, captureWidth, captureHeight);
         xStart = -xMax / 2;
         yStart = -yMax / 2;
+        ogLeft = (int)xStart;
+        ogRight = -(int)xStart;
+        ogTop = -(int)yStart;
+        ogBottom = (int)yStart;
         data = new CubeData();
         cubeleteBasePosition = cubelete.transform.localPosition;
         cubeTrackPosition = transform.localPosition;
@@ -83,14 +107,14 @@ public class TheCube : MonoBehaviour {
     }
 
     void Awake () {
-        //iOS serializer fix
+        //iOS serializer fix // supposed
         System.Environment.SetEnvironmentVariable("MONO_REFLECTION_SERIALIZER", "yes");
     }
 
     void Update () {
         if (cubeSaveIterator > cubeSaveLimit && cubeSaveNeeded == true) {
             cubeSaveIterator = 0;
-            SaveData("cubeletes");
+            SaveData("cubeletes_screenslist_maincubelocation");
             cubeSaveNeeded = false;
         }
         else {
@@ -109,18 +133,18 @@ public class TheCube : MonoBehaviour {
             FadeCube(false);
             remake = true;
         }
-        if (faded == false) {
-            if (currPos.y < minCubeY) {
-                currPos.y = minCubeY;
+        if (faded == false && currPos != cubeTrackPosition) {
+            if (currPos.y < minCubeYZoomed) {
+                currPos.y = minCubeYZoomed;
             }
-            else if (currPos.y > maxCubeY) {
-                currPos.y = maxCubeY;
+            else if (currPos.y > maxCubeYZoomed) {
+                currPos.y = maxCubeYZoomed;
             }
-            if (currPos.x < minCubeX) {
-                currPos.x = minCubeX;
+            if (currPos.x < minCubeXZoomed) {
+                currPos.x = minCubeXZoomed;
             }
-            else if (currPos.x > maxCubeX) {
-                currPos.x = maxCubeX;
+            else if (currPos.x > maxCubeXZoomed) {
+                currPos.x = maxCubeXZoomed;
             }
             transform.localPosition = new Vector3(currPos.x, currPos.y, currPos.z);
             xTracker += (currPos.x - cubeTrackPosition.x);
@@ -137,21 +161,31 @@ public class TheCube : MonoBehaviour {
                     RemakeInteractibleSurfaceByZoom(xTakeaway, yTakeaway);
                 }
                 else {
+                    //if (Left <= -500 || Right >= 500 || Top >= 520 || Bottom <= -480) {
+                    //    return;
+                    //}
                     UpdateInteractibleSurface(xTakeaway, yTakeaway);
                 }
-                mainXTracker += xTakeaway;
-                mainYTracker += yTakeaway;
-                Debug.Log(string.Format("{0}, {1}", mainXTracker, mainYTracker));
-                SaveData("maincubelocation");
             }
             else if (remake) {
                 RemakeInteractibleSurfaceByZoom(0, 0);
             }
         }
-    }
-
-    void SaveScreenshot (bool fade, string ssname) {
-        screenShotCamera.CaptureScreenshot(fade, ssname);
+        else if (faded == true) {
+            if (currPos.y < minCubeYFaded) {
+                currPos.y = minCubeYFaded;
+            }
+            else if (currPos.y > maxCubeYFaded) {
+                currPos.y = maxCubeYFaded;
+            }
+            if (currPos.x < minCubeXFaded) {
+                currPos.x = minCubeXFaded;
+            }
+            else if (currPos.x > maxCubeXFaded) {
+                currPos.x = maxCubeXFaded;
+            }
+            transform.localPosition = new Vector3(currPos.x, currPos.y, currPos.z);
+        }
     }
 
     public void PutScreenshot (Sprite file, string name, Texture2D ss) {
@@ -159,10 +193,9 @@ public class TheCube : MonoBehaviour {
         SpriteRenderer newssS;
         PsuedoMono newssP;
         byte[] d = ss.GetRawTextureData();
-        if (screensList.ContainsKey(name)) {
-            screensList.Remove(name);
+        if (!screensList.ContainsKey(name)) {
+            screensList.Add(name, true);
         }
-        screensList.Add(name, d.ToString());
         if (spriteChildren != null && spriteChildren.ContainsKey(name)) {
             newss = spriteChildren[name];
             newssS = newss.GetComponent<SpriteRenderer>();
@@ -177,16 +210,56 @@ public class TheCube : MonoBehaviour {
         newssP.color = screenColor;
         newssS.sprite = file;
         newss.name = name;
-        var x = (0.01f * -(mainXTracker));
-
-        var y = (0.01f * -(mainYTracker));
-
-        Debug.Log(string.Format("x - {0}, y - {1}", x, y));
+        var x = (0.0078125f * -(ogLeft - Left));
+        var y = (0.0078125f * -(ogBottom - Bottom));
+        //Debug.Log(string.Format("x - {0}, y - {1}", x, y));
         newss.transform.localPosition = new Vector3(
             x,
             y,
             0
         );
+    }
+
+    void RemakeScreenshots () {
+        foreach (var s in screensList) {
+            var st = s.Key.Split('_');
+            Left = int.Parse(st[0]);
+            Right = int.Parse(st[1]);
+            Bottom = int.Parse(st[2]);
+            Top = int.Parse(st[3]);
+            var screenname = string.Format("{0}_{1}_{2}_{3}", Left, Right, Bottom, Top);
+            CaptureScreenshot(screenname);
+        }
+    }
+
+    void CaptureScreenshot (string ssname) {
+        Sprite sp = null;
+        Texture2D screenShot = new Texture2D(captureWidth, captureHeight, TextureFormat.ARGB32, false);
+        Color[] pixels = screenShot.GetPixels(0, 0, screenShot.width, screenShot.height, 0);
+        var yKeeper = 0;
+        var yMulti = 1;
+        int y = Bottom;
+        for (int p = 0; p < pixels.Length; p++) {
+            var x = Left + (p % screenShot.width);
+            if (yKeeper >= screenShot.width) {
+                y = Bottom + yMulti;
+                yMulti++;
+                yKeeper = 0;
+            }
+            yKeeper++;
+            var key = string.Format("{0},{1}", x, y);
+            if (deletedCubeletes.ContainsKey(key)) {
+                pixels[p] = newcol;
+            }
+            else {
+                pixels[p] = transp;
+            }
+        }
+        screenShot.SetPixels(0, 0, screenShot.width, screenShot.height, pixels, 0);
+        screenShot.Apply();
+        screenShot.filterMode = FilterMode.Point;
+        sp = Sprite.Create(screenShot, rect, new Vector2(0.5f, 0.5f), 128f);
+        PutScreenshot(sp, ssname, screenShot);
     }
 
     void FadeCube (bool fade) {
@@ -201,11 +274,7 @@ public class TheCube : MonoBehaviour {
     }
 
     public void FadeCubeCallback (bool fade) {
-        string mode = "screenslist";
-        if (fade) {
-            mode = "cubeletes_screenslist";
-        }
-        SaveData(mode);
+        cubeSaveNeeded = true;
         fakeSurface.SetActive(fade);
         surface.SetActive(!fade);
         FreeInteractibleSurfaceByZoom();
@@ -252,10 +321,13 @@ public class TheCube : MonoBehaviour {
                 newCubelete.y = cubeComp.y;
                 newCubelete.gameObject.SetActive(true);
                 cubeComp.EnableMeshR(true);
-                if (deletedCubeletes.ContainsKey(string.Format("{0},{1}", cubeComp.x, cubeComp.y))) {
+                if (deletedCubeletes.ContainsKey(string.Format("{0},{1}", cubeComp.x, cubeComp.y)) ||
+                cubeComp.x > RightMax ||
+                cubeComp.x < LeftMax ||
+                cubeComp.y > TopMax ||
+                cubeComp.y < BottomMax) {
                     newCubelete.gameObject.SetActive(false);
                 }
-
             }
         }
         remake = false;
@@ -289,7 +361,11 @@ public class TheCube : MonoBehaviour {
                     newCubelete.y = cubeComp.y;
                     cubeComp.cube = this;
                     surfaceCubeletes[i - Left].Add(newCubelete);
-                    if (deletedCubeletes.ContainsKey(string.Format("{0},{1}", cubeComp.x, cubeComp.y))) {
+                    if (deletedCubeletes.ContainsKey(string.Format("{0},{1}", cubeComp.x, cubeComp.y)) ||
+                    cubeComp.x > RightMax ||
+                    cubeComp.x < LeftMax ||
+                    cubeComp.y > TopMax ||
+                    cubeComp.y < BottomMax) {
                         newCubelete.gameObject.SetActive(false);
                     }
                 }
@@ -371,7 +447,7 @@ public class TheCube : MonoBehaviour {
                 }
             }
         }
-        //ad
+        //add
         if (xCubesAbs > 0) {
             direction = !direction;
         }
@@ -420,7 +496,11 @@ public class TheCube : MonoBehaviour {
                 newCubelete.y = cubeComp.y;
                 newCubelete.gameObject.SetActive(true);
                 cubeComp.EnableMeshR(true);
-                if (deletedCubeletes.ContainsKey(string.Format("{0},{1}", cubeComp.x, cubeComp.y))) {
+                if (deletedCubeletes.ContainsKey(string.Format("{0},{1}", cubeComp.x, cubeComp.y)) ||
+                cubeComp.x > RightMax ||
+                cubeComp.x < LeftMax ||
+                cubeComp.y > TopMax ||
+                cubeComp.y < BottomMax) {
                     newCubelete.gameObject.SetActive(false);
                 }
             }
@@ -431,11 +511,10 @@ public class TheCube : MonoBehaviour {
     }
 
     public void addDeletedCubelete (int x, int y) {
-        Debug.Log(string.Format("delete - {0}, {1}", x, y));
         deletedCubeletes.Add(string.Format("{0},{1}", x, y), true);
         cubeSaveNeeded = true;
-        var screenname = string.Format("{0}_{1}_{2}_{3}", Left, Right, Top, Bottom);
-        SaveScreenshot(false, screenname);
+        var screenname = string.Format("{0}_{1}_{2}_{3}", Left, Right, Bottom, Top);
+        CaptureScreenshot(screenname);
     }
 
     public void SaveData (string mode) {
@@ -444,7 +523,7 @@ public class TheCube : MonoBehaviour {
         if (mode == "cubeletes" ||
             mode == "cubeletes_screenslist" ||
             mode == "cubeletes_maincubelocation" ||
-            mode == "cubeletes_screenslis_maincubelocation"
+            mode == "cubeletes_screenslist_maincubelocation"
            ) {
             _SaveDeletedCubeletesData();
         }
@@ -475,49 +554,47 @@ public class TheCube : MonoBehaviour {
         data.mainCubeLocation = new Dictionary<string, float>() {
             { "x", transform.localPosition.x },
             { "y", transform.localPosition.y },
-            { "z", 0.5f }
+            { "z", transform.localPosition.z }
         };
     }
 
     public void LoadData () {
-        if (File.Exists((Application.persistentDataPath + "/bew.wyco"))) {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath + "/bew.wyco", FileMode.Open);
-            data = (CubeData)bf.Deserialize(file);
-            file.Close();
-            deletedCubeletes = data.deletedCubeletesData != null ? data.deletedCubeletesData : deletedCubeletes;
-            screensList = data.screensList != null ? data.screensList : screensList;
-            if (data.mainCubeLocation != null) {
-                transform.localPosition = new Vector3(
-                    data.mainCubeLocation["x"],
-                    data.mainCubeLocation["y"],
-                    data.mainCubeLocation["z"]
-                );
-                var oldTrack = cubeTrackPosition;
-                cubeTrackPosition = transform.localPosition;
-                var tempXTracker = (cubeTrackPosition.x - oldTrack.x);
-                var tempYTracker = (cubeTrackPosition.y - oldTrack.y);
-                var tempXCubes = tempXTracker / 0.02f;
-                var tempYCubes = tempYTracker / 0.02f;
-                Left = (int)xStart - (int)tempXCubes;
-                Right = (int)-xStart - (int)tempXCubes;
-                Top = (int)-yStart - (int)tempYCubes;
-                Bottom = (int)yStart - (int)tempYCubes;
-                loaded = true;
-            }
+        if (!File.Exists((Application.persistentDataPath + "/bew.wyco"))) {
+            return;
         }
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Open(Application.persistentDataPath + "/bew.wyco", FileMode.Open);
+        data = (CubeData)bf.Deserialize(file);
+        file.Close();
+        deletedCubeletes = data.deletedCubeletesData != null ? data.deletedCubeletesData : deletedCubeletes;
+        screensList = data.screensList != null ? data.screensList : screensList;
+        if (deletedCubeletes.Count > 0) {
+            RemakeScreenshots();
+        }
+        if (data.mainCubeLocation != null) {
+            transform.localPosition = new Vector3(
+                data.mainCubeLocation["x"],
+                data.mainCubeLocation["y"],
+                data.mainCubeLocation["z"]
+            );
+            var oldTrack = cubeTrackPosition;
+            cubeTrackPosition = transform.localPosition;
+            var tempXTracker = (cubeTrackPosition.x - oldTrack.x);
+            var tempYTracker = (cubeTrackPosition.y - oldTrack.y);
+            var tempXCubes = tempXTracker / 0.02f;
+            var tempYCubes = tempYTracker / 0.02f;
+            Left = (int)xStart - (int)tempXCubes;
+            Right = (int)-xStart - (int)tempXCubes;
+            Top = (int)-yStart - (int)tempYCubes;
+            Bottom = (int)yStart - (int)tempYCubes;
+            loaded = true;
+        }
+
     }
 
     public void DeleteSave () {
         if (File.Exists(Application.persistentDataPath + "/bew.wyco")) {
             File.Delete(Application.persistentDataPath + "/bew.wyco");
-        }
-        var keys = screensList.Keys;
-        foreach (var key in keys) {
-            if (File.Exists(key)) {
-                File.Delete(key);
-            }
-            screensList.Remove(key);
         }
     }
 
@@ -557,7 +634,6 @@ public class TheCube : MonoBehaviour {
     }
 }
 
-
 public class CubeleteObject {
     public GameObject gameObject;
     public int x;
@@ -568,7 +644,7 @@ public class CubeleteObject {
 public class CubeData {
     public Dictionary<string, bool> deletedCubeletesData;
     public Dictionary<string, float> mainCubeLocation;
-    public Dictionary<string, string> screensList;
+    public Dictionary<string, bool> screensList;
 }
 
 public class PsuedoMono : MonoBehaviour {

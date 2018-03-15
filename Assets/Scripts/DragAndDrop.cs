@@ -42,5 +42,6 @@ public class DragAndDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     public void OnEndDrag (PointerEventData eventData) {
         DraggedInstance = null;
         _offsetToMouse = Vector3.zero;
+        cube.cubeSaveNeeded = true;
     }
 }

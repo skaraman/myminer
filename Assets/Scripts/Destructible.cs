@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
+using System;
+using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Destructible : MonoBehaviour {
     private bool dissolve;
@@ -13,6 +16,29 @@ public class Destructible : MonoBehaviour {
         amount = 0;
         updateDelayer = 0;
         children = gameObject.GetComponentsInChildren<Renderer>();
+        DestroyHalf();
+    }
+
+    private Renderer[] RemoveIndices (Renderer[] indicesArray, int[] keepAt) {
+        Renderer[] newIndicesArray = new Renderer[keepAt.Length];
+        int i = 0;
+        int j = 0;
+        while (i < indicesArray.Length) {
+            if (keepAt.Contains(i)) {
+                newIndicesArray[j] = indicesArray[i];
+                j++;
+            }
+            else {
+                Destroy(indicesArray[i].gameObject);
+            }
+            i++;
+        }
+        return newIndicesArray;
+    }
+
+    void DestroyHalf () {
+        var childrenToDestroy = RandomRange(children.Count() / 2, children.Count());
+        children = RemoveIndices(children, childrenToDestroy);
     }
 
     public void PublicReceiver (GameObject piecesSurface, GameObject cubelete) {
@@ -41,4 +67,16 @@ public class Destructible : MonoBehaviour {
         }
         updateDelayer++;
     }
+
+    private int[] RandomRange (int max, int range) {
+        System.Random randNum = new System.Random();
+        int[] test2 = Enumerable
+            .Range(0, range)
+            .OrderBy(i => randNum.Next())
+            .Take(max)
+            .ToArray();
+        return test2;
+    }
+
 }
+
