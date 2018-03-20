@@ -192,7 +192,7 @@ public class TheCube : MonoBehaviour {
         GameObject newss;
         SpriteRenderer newssS;
         PsuedoMono newssP;
-        byte[] d = ss.GetRawTextureData();
+        //byte[] d = ss.GetRawTextureData();
         if (!screensList.ContainsKey(name)) {
             screensList.Add(name, true);
         }
