@@ -124,7 +124,7 @@ GameObject:
   m_Component:
   - component: {fileID: 24218545}
   m_Layer: 5
-  m_Name: bottom UI
+  m_Name: bottom anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -146,6 +146,9 @@ RectTransform:
   - {fileID: 1468255890}
   - {fileID: 200831424}
   - {fileID: 1896934557}
+  - {fileID: 1636731466}
+  - {fileID: 121709972}
+  - {fileID: 896617064}
   m_Father: {fileID: 1077000638}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -235,7 +238,7 @@ GameObject:
   - component: {fileID: 121709974}
   - component: {fileID: 121709973}
   m_Layer: 0
-  m_Name: backing
+  m_Name: top_backing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -248,11 +251,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 121709971}
   m_LocalRotation: {x: 0.5, y: -0, z: -0, w: -0.8660254}
-  m_LocalPosition: {x: -478.9861, y: -982.5857, z: 0.0621}
+  m_LocalPosition: {x: -478.9914, y: -99.9939, z: 0.0608}
   m_LocalScale: {x: 0.006416887, y: 0.011252219, z: 0.0011584649}
   m_Children: []
-  m_Father: {fileID: 2126583754}
-  m_RootOrder: 1
+  m_Father: {fileID: 24218545}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 300, y: 0, z: 0}
 --- !u!65 &121709973
 BoxCollider:
@@ -1019,19 +1022,19 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 896617063}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -131.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 29724373}
   - {fileID: 945077366}
   - {fileID: 1728387380}
-  m_Father: {fileID: 2126583754}
-  m_RootOrder: 2
+  m_Father: {fileID: 24218545}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 431.7, y: 150}
+  m_AnchoredPosition: {x: 431.7, y: 1187.163}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &945077365
@@ -1367,7 +1370,6 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 24218545}
-  - {fileID: 2126583754}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1676,11 +1678,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1636731465}
   m_LocalRotation: {x: 0.5, y: -0, z: -0, w: -0.8660254}
-  m_LocalPosition: {x: -479.0192, y: -982.58606, z: 0.05985}
+  m_LocalPosition: {x: -479.015, y: -99.99406, z: 0.04979}
   m_LocalScale: {x: 0.002, y: 0.011252219, z: 0.002}
   m_Children: []
-  m_Father: {fileID: 2126583754}
-  m_RootOrder: 0
+  m_Father: {fileID: 24218545}
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 300, y: 0, z: 0}
 --- !u!65 &1636731467
 BoxCollider:
@@ -1850,7 +1852,7 @@ GameObject:
   - component: {fileID: 1726989381}
   - component: {fileID: 1726989380}
   m_Layer: 0
-  m_Name: backing
+  m_Name: bot_backing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2925,42 +2927,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2110554446}
---- !u!1 &2126583753
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 2126583754}
-  m_Layer: 5
-  m_Name: top UI
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &2126583754
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2126583753}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1636731466}
-  - {fileID: 121709972}
-  - {fileID: 896617064}
-  m_Father: {fileID: 1077000638}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 100}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2129461604 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100000, guid: daf19ac754e6f49a6b5ea71a15071cb6, type: 3}

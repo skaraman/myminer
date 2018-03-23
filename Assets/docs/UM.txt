@@ -1,0 +1,62 @@
+multipliers -
+
+micro  - 6
+milli - 3
+kilo + 3
+mega + 6
+giga + 9
+tera + 12
+peta + 15
+exa + 18
+zetta + 21
+yotta + 24
+xenotta + 27
+bronto + 30
+geopbytes
+xona
+weka
+vunda
+uda
+treda
+sorta
+rinta
+quexa
+pepta
+ocha
+nena
+minga
+luma
+hana
+ana
+strato
+
+units -
+
+gram - base
+sequo + 1
+amphico + 2
+titano + 3
+jack + 4
+argenta + 5
+para + 6
+raffle + 7
+gia + 8
+humo + 9
+mero + 10
+grea + 11
+quetza + 12
+blu + 13
+sarco + 14
+rikoxi + 15
+
+examples -
+
+micro gram
+gram
+strato gram
+micro sequo
+sequo
+starto sequo
+micro sarco
+sarco
+strato sarco

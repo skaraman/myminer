@@ -9,6 +9,7 @@ public class Destructible : MonoBehaviour {
     private float amount;
     private Renderer[] children;
     private int updateDelayer;
+    private int updateDelayLimit = 1;
     // Use this for initialization
 
     void Start () {
@@ -55,7 +56,7 @@ public class Destructible : MonoBehaviour {
     }
 
     private void LateUpdate () {
-        if (dissolve && updateDelayer > 3) {
+        if (dissolve && updateDelayer > updateDelayLimit) {
             amount += 0.1f;
             updateDelayer = 0;
             foreach (var c in children) {
