@@ -91,7 +91,7 @@ Shader "FX/Glass/Stained BumpDistort (no grab)" {
                     col = lerp (col, tint, _TintAmt);
 
                     if (col.a < _CutOff) discard;
-                    //col.a = _Transparency;
+                    col.a = _Transparency;
                     UNITY_APPLY_FOG(i.fogCoord, col);
                     return col;
                 }
