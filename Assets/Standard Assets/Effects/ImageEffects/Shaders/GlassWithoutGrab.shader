@@ -19,18 +19,21 @@ Shader "FX/Glass/Stained BumpDistort (no grab)" {
     Category {
 
         // We must be transparent, so other objects are drawn before this one.
-        Tags { "Queue"="Transparent+1" "RenderType"="Transparent" }
+        Tags { "Queue"="Transparent" "RenderType"="Transparent" }
 
         SubShader {
 
             Stencil {
+                Ref 1
+                Comp always
+                Pass replace
             }
-
+            
             Pass {
                 Name "BASE"
                 Tags { "LightMode" = "Always" }
                 Blend SrcAlpha OneMinusSrcAlpha
-                Cull Back
+                //Cull Back
              
                 CGPROGRAM
                 #pragma vertex vert

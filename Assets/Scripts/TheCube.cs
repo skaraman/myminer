@@ -67,11 +67,13 @@ public class TheCube : MonoBehaviour {
     public GameObject spriteHolder;
     public GameObject spriteGO;
 
+    //private RectTransformUtility RTUtil = new RectTransformUtility();
+
     public Dictionary<string, bool> deletedCubeletes = new Dictionary<string, bool>();
     public Dictionary<string, bool> screensList = new Dictionary<string, bool>();
 
-    private Color screenColor = new Color(1, .83f, .83f, 1);
-    private Color newcol = new Color(1.00f, 0.78f, 0.01f, 1);
+    private Color spriteShaderColor = new Color(0.81f, 0.65f, 0, 1);
+    private Color white = new Color(1, 1, 1, 1);
     private Color transp = new Color(1, 1, 1, 0);
     private Rect rect;
 
@@ -85,6 +87,8 @@ public class TheCube : MonoBehaviour {
 
     private int captureWidth;
     private int captureHeight;
+
+    public Material ssMat;
 
     CubeData data;
     void Start () {
@@ -190,7 +194,7 @@ public class TheCube : MonoBehaviour {
 
     public void PutScreenshot (Sprite file, string name, Texture2D ss) {
         GameObject newss;
-        SpriteRenderer newssS;
+        RawImage newssS;
         PsuedoMono newssP;
         //byte[] d = ss.GetRawTextureData();
         if (!screensList.ContainsKey(name)) {
@@ -198,20 +202,26 @@ public class TheCube : MonoBehaviour {
         }
         if (spriteChildren != null && spriteChildren.ContainsKey(name)) {
             newss = spriteChildren[name];
-            newssS = newss.GetComponent<SpriteRenderer>();
+            newssS = newss.GetComponent<RawImage>();
             newssP = newss.GetComponent<PsuedoMono>();
         }
         else {
             newss = Instantiate(spriteGO, spriteHolder.transform);
             spriteChildren.Add(name, newss);
-            newssS = newss.AddComponent<SpriteRenderer>();
+            newssS = newss.AddComponent<RawImage>();
             newssP = newss.AddComponent<PsuedoMono>();
         }
-        newssP.color = screenColor;
-        newssS.sprite = file;
+        var rectT = newss.GetComponent<RectTransform>();
+        rectT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, captureWidth);
+        rectT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, captureHeight);
+        rectT.localScale = new Vector3(0.00784f, 0.00784f, 1);
+        newssS.texture = ss;
+        newssS.material = ssMat;
+        newssP.color = spriteShaderColor;
+        //newss.GetComponent<SpriteRenderer>().material.SetColor("_TintColor", spriteShaderColor);
         newss.name = name;
-        var x = (0.0078125f * -(ogLeft - Left));
-        var y = (0.0078125f * -(ogBottom - Bottom));
+        var x = (float)Math.Round(0.0078125f * -(ogLeft - Left), 4);
+        var y = (float)Math.Round(0.0078125f * -(ogBottom - Bottom), 3);
         //Debug.Log(string.Format("x - {0}, y - {1}", x, y));
         newss.transform.localPosition = new Vector3(
             x,
@@ -249,7 +259,7 @@ public class TheCube : MonoBehaviour {
             yKeeper++;
             var key = string.Format("{0},{1}", x, y);
             if (deletedCubeletes.ContainsKey(key)) {
-                pixels[p] = newcol;
+                pixels[p] = white;
             }
             else {
                 pixels[p] = transp;
@@ -650,6 +660,6 @@ public class CubeData {
 public class PsuedoMono : MonoBehaviour {
     public Color color;
     void Awake () {
-        GetComponent<SpriteRenderer>().color = color;
+        GetComponent<RawImage>().color = color;
     }
 }
