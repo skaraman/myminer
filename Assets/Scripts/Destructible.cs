@@ -52,6 +52,7 @@ public class Destructible : MonoBehaviour {
         transform.localPosition = cubelete.transform.localPosition;
         yield return new WaitForSeconds(0.1f);
         transform.SetParent(piecesSurface.transform, true);
+        yield return new WaitForSeconds(1f);
         dissolve = true;
     }
 

@@ -8,8 +8,11 @@ public class ButtonProcessor : MonoBehaviour {
     public bool isPlusPressed = false;
     public bool isMinusPressed = false;
     public CameraHandler camHandler;
+    public GameObject topUIButton;
     private int pIt = 0;
     private int mIt = 0;
+
+    private Animator top;
 
     void Start () {
     }
@@ -44,5 +47,10 @@ public class ButtonProcessor : MonoBehaviour {
             isMinusPressed = false;
             mIt = 0;
         }
+    }
+
+    public void onTopUIButton () {
+        top = GetComponent<Animator>();
+        top.Play("openTopUI");
     }
 }
