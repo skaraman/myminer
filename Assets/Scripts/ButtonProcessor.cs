@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
@@ -10,16 +8,13 @@ public class ButtonProcessor : MonoBehaviour {
     public bool isPlusPressed = false;
     public bool isMinusPressed = false;
     public CameraHandler camHandler;
+    public GameObject topUIButton;
     private int pIt = 0;
     private int mIt = 0;
 
-    public Animator top;
-    public Animator bottom;
-    private Dictionary<string, ButtonWrapper> buttonAnimations = new Dictionary<string, ButtonWrapper>();
+    private Animator top;
 
     void Start () {
-        buttonAnimations.Add("top", new ButtonWrapper(new string[] { "openTopUI", "closeTopUI" }, top));
-        buttonAnimations.Add("bottom", new ButtonWrapper(new string[] { "openBottomUI", "closeBottomUI" }, bottom));
     }
 
     void Update () {
@@ -54,22 +49,8 @@ public class ButtonProcessor : MonoBehaviour {
         }
     }
 
-    public void onUIButton (string name) {
-        var button = buttonAnimations[name];
-        var animator = button.Animator;
-        animator.Play(button.Names[button.Tracker]);
-        button.Tracker = button.Tracker == 0 ? 1 : 0;
+    public void onTopUIButton () {
+        top = GetComponent<Animator>();
+        top.Play("openTopUI");
     }
-}
-
-public class ButtonWrapper {
-
-    public ButtonWrapper (string[] names, Animator animator) {
-        Names = names;
-        Animator = animator;
-    }
-
-    public string[] Names { get; set; }
-    public Animator Animator { get; set; }
-    public int Tracker = 0;
 }

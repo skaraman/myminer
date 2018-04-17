@@ -1084,7 +1084,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4604515130143892}
   - component: {fileID: 114539055605922644}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: cubeDestruction100
   m_TagString: Untagged
   m_Icon: {fileID: 0}

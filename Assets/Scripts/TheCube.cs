@@ -34,8 +34,6 @@ public class TheCube : MonoBehaviour {
     private float yTracker;
     private float xCubes;
     private float yCubes;
-    private float xTakeaway;
-    private float yTakeaway;
 
     private float xStart;
     private float yStart;
@@ -74,7 +72,7 @@ public class TheCube : MonoBehaviour {
     public Dictionary<string, bool> deletedCubeletes = new Dictionary<string, bool>();
     public Dictionary<string, bool> screensList = new Dictionary<string, bool>();
 
-    private Color spriteShaderColor = new Color(0.66f, 0.47f, 0.09f, 1);
+    private Color spriteShaderColor = new Color(0.81f, 0.65f, 0, 1);
     private Color white = new Color(1, 1, 1, 1);
     private Color transp = new Color(1, 1, 1, 0);
     private Rect rect;
@@ -159,8 +157,8 @@ public class TheCube : MonoBehaviour {
             xCubes = xTracker / 0.02f;
             yCubes = yTracker / 0.02f;
             if (Mathf.Abs(xCubes) > 1 || Mathf.Abs(yCubes) > 1) {
-                xTakeaway = Mathf.Round(xCubes);
-                yTakeaway = Mathf.Round(yCubes);
+                var xTakeaway = Mathf.Round(xCubes);
+                var yTakeaway = Mathf.Round(yCubes);
                 xTracker -= xTakeaway * 0.02f;
                 yTracker -= yTakeaway * 0.02f;
                 if (remake) {
@@ -220,6 +218,7 @@ public class TheCube : MonoBehaviour {
         newssS.texture = ss;
         newssS.material = ssMat;
         newssP.color = spriteShaderColor;
+        //newss.GetComponent<SpriteRenderer>().material.SetColor("_TintColor", spriteShaderColor);
         newss.name = name;
         var x = (float)Math.Round(0.0078125f * -(ogLeft - Left), 4);
         var y = (float)Math.Round(0.0078125f * -(ogBottom - Bottom), 3);
