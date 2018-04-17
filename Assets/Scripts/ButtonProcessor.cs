@@ -57,8 +57,7 @@ public class ButtonProcessor : MonoBehaviour {
     public void onUIButton (string name) {
         var button = buttonAnimations[name];
         var animator = button.Animator;
-        animator.Play(button.Names[button.Tracker]);
-        button.Tracker = button.Tracker == 0 ? 1 : 0;
+        animator.SetBool("toggle", !animator.GetBool("toggle"));
     }
 }
 

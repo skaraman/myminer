@@ -25,6 +25,7 @@ public class TheCube : MonoBehaviour {
     public bool zoomIn = true;
     public bool zoomOut = true;
     public GameObject piecesSurface;
+    public Grams grams;
 
     private bool faded = false;
     private bool remake = false;
@@ -526,6 +527,7 @@ public class TheCube : MonoBehaviour {
         cubeSaveNeeded = true;
         var screenname = string.Format("{0}_{1}_{2}_{3}", Left, Right, Bottom, Top);
         CaptureScreenshot(screenname);
+        grams.AddGrams(ssMat.name);
     }
 
     public void SaveData (string mode) {
@@ -552,6 +554,7 @@ public class TheCube : MonoBehaviour {
            ) {
             _SaveMainCubeLocation();
         }
+        //data.cubeName = ssMat.name;
         bf.Serialize(file, data);
         file.Close();
     }
@@ -653,6 +656,7 @@ public class CubeleteObject {
 
 [Serializable]
 public class CubeData {
+    public string cubeName;
     public Dictionary<string, bool> deletedCubeletesData;
     public Dictionary<string, float> mainCubeLocation;
     public Dictionary<string, bool> screensList;
