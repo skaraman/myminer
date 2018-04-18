@@ -70,12 +70,10 @@ public class TheCube : MonoBehaviour {
     public GameObject spriteHolder;
     public GameObject spriteGO;
 
-    //private RectTransformUtility RTUtil = new RectTransformUtility();
-
     public Dictionary<string, bool> deletedCubeletes = new Dictionary<string, bool>();
     public Dictionary<string, bool> screensList = new Dictionary<string, bool>();
 
-    private Color spriteShaderColor = new Color(0.66f, 0.47f, 0.09f, 1);
+    public Color spriteShaderColor = new Color(0.66f, 0.47f, 0.09f, 1);
     private Color white = new Color(1, 1, 1, 1);
     private Color transp = new Color(1, 1, 1, 0);
     private Rect rect;
@@ -92,9 +90,10 @@ public class TheCube : MonoBehaviour {
     private int captureHeight;
 
     public Material ssMat;
-
     CubeData data;
+
     void Start () {
+        grams.SetColor(spriteShaderColor);
         captureWidth = (int)xMax;
         captureHeight = (int)yMax;
         rect = new Rect(0, 0, captureWidth, captureHeight);
@@ -571,7 +570,9 @@ public class TheCube : MonoBehaviour {
             { "z", transform.localPosition.z }
         };
     }
-
+    public void _SaveGrams (GramsKeeper values) {
+        data.grams = values;
+    }
     public void LoadData () {
         if (!File.Exists((Application.persistentDataPath + "/bew.wyco"))) {
             return;
@@ -602,6 +603,9 @@ public class TheCube : MonoBehaviour {
             Top = (int)-yStart - (int)tempYCubes;
             Bottom = (int)yStart - (int)tempYCubes;
             loaded = true;
+        }
+        if (data.grams != null) {
+            grams.LoadGrams(data.grams);
         }
 
     }
@@ -660,6 +664,7 @@ public class CubeData {
     public Dictionary<string, bool> deletedCubeletesData;
     public Dictionary<string, float> mainCubeLocation;
     public Dictionary<string, bool> screensList;
+    public GramsKeeper grams;
 }
 
 public class PsuedoMono : MonoBehaviour {

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Grams : MonoBehaviour {
 
+    public TheCube cube;
     public GameObject numerals;
     public GameObject label;
 
@@ -16,30 +17,96 @@ public class Grams : MonoBehaviour {
     private string[] units = {"gram","sequo","amphico","titano","jack","argenta",
         "para","raffle","gia","humo","mero","grea","quetza","blu","sarco","rikoxi"};
 
+    private int multiIndex = 0;
+    private int unitIndex = 0;
+
     private Text numeralsText;
     private Text labelText;
 
     private int[] fontSizesNumerals = new int[] { 200, 175, 150, 110, 90, 75 };
-    private int[] fontSizesLabel = new int[] { 121, 112, 103, 94, 85, 76, 67, 58 };
+    private int[] fontSizesLabel = new int[] { 99, 95, 91, 87, 83, 79, 75, 71 };
+
+    private Shadow numShadow;
+    private Shadow labelShadow;
+    private Outline numOutline;
+    private Outline labelOutline;
+
+    private Dictionary<string, int> valuesKeeper = new Dictionary<string, int>();
+
+    private int multiLength;
+    private int unitLength;
+    private int numLength;
+
     // Use this for initialization
     void Start () {
         numeralsText = numerals.GetComponent<Text>();
         labelText = label.GetComponent<Text>();
+        ProcessTextSize("0", GetValueName());
+        numShadow = numerals.GetComponent<Shadow>();
+        labelShadow = label.GetComponent<Shadow>();
+        numOutline = numerals.GetComponent<Outline>();
+        labelOutline = label.GetComponent<Outline>();
+    }
 
-        ProcessTextSize("0", string.Format("{0}\n{1}", multipliers[0], units[0]));
+    string GetValueName () {
+        multiLength = multipliers[multiIndex].Length;
+        unitLength = units[unitIndex].Length;
+        return string.Format("{0}\n{1}", multipliers[multiIndex], units[unitIndex]);
     }
 
     void ProcessTextSize (string numberValue, string textString) {
-
         numeralsText.text = numberValue;
         labelText.text = textString;
+        numeralsText.fontSize = fontSizesNumerals[numLength];
+        labelText.fontSize = fontSizesLabel[multiLength > unitLength ? multiLength : unitLength];
     }
 
     public void AddGrams (string cubeName) {
+        int value = 0;
+        int score = 1;
+        if (valuesKeeper.ContainsKey(GetValueName())) {
+            value = valuesKeeper[GetValueName()];
+            value += score;
+            valuesKeeper[GetValueName()] = value;
+        }
+        else {
+            valuesKeeper.Add(GetValueName(), value + score);
+        }
+        cube._SaveGrams(new GramsKeeper(multiIndex, unitIndex, valuesKeeper));
+        numLength = valuesKeeper[GetValueName()].ToString().Length;
+        ProcessTextSize(valuesKeeper[GetValueName()].ToString(), GetValueName());
+    }
 
+    public void LoadGrams (GramsKeeper gramsKeeper) {
+        multiIndex = gramsKeeper.multiI;
+        unitIndex = gramsKeeper.unitI;
+        valuesKeeper = gramsKeeper.values;
+        numLength = valuesKeeper[GetValueName()].ToString().Length;
+        ProcessTextSize(valuesKeeper[GetValueName()].ToString(), GetValueName());
+    }
+
+    public void SetColor (Color color) {
+        numShadow.effectColor = color;
+        labelShadow.effectColor = color;
+        numOutline.effectColor = color;
+        labelOutline.effectColor = color;
     }
     // Update is called once per frame
     void Update () {
 
+    }
+}
+
+
+[System.Serializable]
+public class GramsKeeper {
+    public int multiI;
+    public int unitI;
+    public Dictionary<string, int> values;
+
+    public GramsKeeper (int mI, int uI, Dictionary<string, int> v) {
+        multiI = mI;
+        unitI = uI;
+        values = v;
     }
 }
