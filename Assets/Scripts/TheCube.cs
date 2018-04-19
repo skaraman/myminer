@@ -92,8 +92,10 @@ public class TheCube : MonoBehaviour {
     public Material ssMat;
     CubeData data;
 
+    bool colorSet = false;
+    bool attemptToLoadGrams = false;
+
     void Start () {
-        grams.SetColor(spriteShaderColor);
         captureWidth = (int)xMax;
         captureHeight = (int)yMax;
         rect = new Rect(0, 0, captureWidth, captureHeight);
@@ -118,6 +120,13 @@ public class TheCube : MonoBehaviour {
     }
 
     void Update () {
+        if (!colorSet && grams && grams.started) {
+            grams.SetColor(spriteShaderColor);
+            colorSet = true;
+        }
+        if (attemptToLoadGrams && grams && grams.started) {
+            grams.LoadGrams(data.grams);
+        }
         if (cubeSaveIterator > cubeSaveLimit && cubeSaveNeeded == true) {
             cubeSaveIterator = 0;
             SaveData("cubeletes_screenslist_maincubelocation");
@@ -605,7 +614,7 @@ public class TheCube : MonoBehaviour {
             loaded = true;
         }
         if (data.grams != null) {
-            grams.LoadGrams(data.grams);
+            attemptToLoadGrams = true;
         }
 
     }

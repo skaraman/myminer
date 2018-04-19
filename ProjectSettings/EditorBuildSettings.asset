@@ -6,5 +6,5 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/_scenes/LitToonShaderTut.unity
-    guid: 86836dafd7c45514bb965b5f316364d5
+    path: Assets/_scenes/lbmmain.unity
+    guid: 635358dcad47b4d269f6c058b7023f6b
