@@ -10,8 +10,20 @@ public class DragAndDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     Vector3 temp;
     public TheCube cube;
     public GameObject piecesSurface;
+    public CameraHandler cameraHandler;
+
+    bool CamCheck () {
+        if (cameraHandler != null && cameraHandler.wasZoomingLastFrame) {
+            return true;
+        }
+        return false;
+    }
+
 
     public void OnBeginDrag (PointerEventData eventData) {
+        if (CamCheck()) {
+            return;
+        }
         DraggedInstance = gameObject;
         _startPosition = transform.position;
         _zDistanceToCamera = Mathf.Abs(_startPosition.z - Camera.main.transform.position.z);
@@ -22,13 +34,20 @@ public class DragAndDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     }
 
     public void OnDrag (PointerEventData eventData) {
+        if (CamCheck()) {
+            return;
+        }
         if (Input.touchCount > 1)
             return;
         temp = Camera.main.ScreenToWorldPoint(
             new Vector3(Input.mousePosition.x, Input.mousePosition.y, _startPosition.z)
         ) + _offsetToMouse;
         //var savedPosition = transform.position;
-        transform.position = new Vector3(temp.x, temp.y, _startPosition.z);
+        transform.position = new Vector3(
+            (float)Math.Round(temp.x, 5),
+            (float)Math.Round(temp.y, 5),
+            _startPosition.z
+        );
         //piecesSurface.transform.position = new Vector3(temp.x, temp.y, _startPosition.z);
         //transform.position = new Vector3(temp.x, _startPosition.y, _startPosition.z);
         //		var xCubes = Mathf.RoundToInt ((savedPosition.x - temp.x) / 0.02f);
@@ -40,6 +59,9 @@ public class DragAndDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     }
 
     public void OnEndDrag (PointerEventData eventData) {
+        if (CamCheck()) {
+            return;
+        }
         DraggedInstance = null;
         _offsetToMouse = Vector3.zero;
         cube.cubeSaveNeeded = true;

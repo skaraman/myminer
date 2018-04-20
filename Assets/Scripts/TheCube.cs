@@ -328,8 +328,8 @@ public class TheCube : MonoBehaviour {
                 CubeleteObject newCubelete = temporaryFreedCubeletes[0];
                 temporaryFreedCubeletes.RemoveAt(0);
                 newCubelete.gameObject.transform.localPosition = new Vector3(
-                    cubeleteBasePosition.x + (spawnMinDist * (xP)) - GlobalXOffset,
-                    cubeleteBasePosition.y + (spawnMinDist * (yP)) - GlobalYOffset,
+                    RoundToExactlyTwoDecimals(cubeleteBasePosition.x + (spawnMinDist * (xP)) - GlobalXOffset),
+                    RoundToExactlyTwoDecimals(cubeleteBasePosition.y + (spawnMinDist * (yP)) - GlobalYOffset),
                     cubeleteBasePosition.z
                 );
                 var cubeComp = newCubelete.gameObject.GetComponent<Cubelete>();
@@ -369,9 +369,9 @@ public class TheCube : MonoBehaviour {
                     CubeleteObject newCubelete = new CubeleteObject();
                     newCubelete.gameObject = Instantiate(cubelete, surface.transform);
                     newCubelete.gameObject.transform.localPosition = new Vector3(
-                        cubeleteBasePosition.x + (spawnMinDist * i) - GlobalXOffset,
-                        cubeleteBasePosition.y + (spawnMinDist * j) - GlobalYOffset,
-                        cubeleteBasePosition.z + (spawnMinDist * k)
+                        RoundToExactlyTwoDecimals(cubeleteBasePosition.x + (spawnMinDist * i) - GlobalXOffset),
+                        RoundToExactlyTwoDecimals(cubeleteBasePosition.y + (spawnMinDist * j) - GlobalYOffset),
+                        RoundToExactlyTwoDecimals(cubeleteBasePosition.z + (spawnMinDist * k))
                     );
                     var cubeComp = newCubelete.gameObject.GetComponent<Cubelete>();
                     cubeComp.x = i;
@@ -482,8 +482,8 @@ public class TheCube : MonoBehaviour {
                 CubeleteObject newCubelete = temporaryFreedCubeletes[0];
                 temporaryFreedCubeletes.RemoveAt(0);
                 newCubelete.gameObject.transform.localPosition = new Vector3(
-                    cubeleteBasePosition.x + (spawnMinDist * (yCubesAbs > 0 ? addX + xP : addX - xP)) - GlobalXOffset,
-                    cubeleteBasePosition.y + (spawnMinDist * (xCubesAbs > 0 ? addY + yP : addY - yP)) - GlobalYOffset,
+                    RoundToExactlyTwoDecimals(cubeleteBasePosition.x + (spawnMinDist * (yCubesAbs > 0 ? addX + xP : addX - xP)) - GlobalXOffset),
+                    RoundToExactlyTwoDecimals(cubeleteBasePosition.y + (spawnMinDist * (xCubesAbs > 0 ? addY + yP : addY - yP)) - GlobalYOffset),
                     cubeleteBasePosition.z
                 );
                 var cubeComp = newCubelete.gameObject.GetComponent<Cubelete>();
@@ -658,6 +658,11 @@ public class TheCube : MonoBehaviour {
             results = basse - adjustment;
         }
         return results;
+    }
+
+    static float RoundToExactlyTwoDecimals (float value) {
+        float result = (float)Math.Round(value, 2) + 0.0001f;
+        return result;
     }
 }
 

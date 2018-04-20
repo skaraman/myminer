@@ -15,7 +15,7 @@ public class Grams : MonoBehaviour {
         "xona","weka","vunda","uda","treda","sorta","rinta","quexa","pepta",
         "ocha","nena","minga","luma","hana","ana","strato"};
 
-    private string[] units = {"phot","neutri","elect","qua","prot","ato",
+    private string[] units = {"gram","phot","neutri","elect","qua","prot","ato",
         "molec","cel","humo","plane","sol","quetza","blu","sarco","rikoxi"};
 
     private int multiIndex = 0;
